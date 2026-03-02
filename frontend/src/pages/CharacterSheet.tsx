@@ -184,13 +184,12 @@ const CharacterSheet = () => {
                   </div>
                   <div className="border-2 border-black rounded-md py-2 px-4 w-full">
                     {item.ammo.map((ammo, index) => (
-                      <span className={`text-md`} key={index}>
-                        {ammo.shortening} [ {ammo.amount} ]{" "}
-                        {item.selected_ammo === ammo.name ? (
+                      <span key={index} className="text-md">
+                        {"shortening" in ammo ? ammo.shortening : ammo.name} [{" "}
+                        {ammo.amount} ]{" "}
+                        {item.selected_ammo === ammo.name && (
                           <span className="text-xs font-bold">(Equipped)</span>
-                        ) : (
-                          ""
-                        )}{" "}
+                        )}
                         {index <= 1 && " - "}
                       </span>
                     ))}
