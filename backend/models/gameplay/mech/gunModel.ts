@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 
 export interface IGun {
   name: string;
@@ -9,11 +9,17 @@ export interface IGun {
   description: string;
   shots: string;
   keywords: string[];
-  traits: string[];
-  effects: string[];
+  traits: Types.ObjectId[];
+  effects: object[];
   range_min: number;
   range_max: number;
 }
+
+const effects = new Schema({
+  type: { type: String, required: true },
+  modifier: { type: Number, default: 0 },
+  positive: { type: Boolean, default: true }
+})
 
 const gunSchema = new Schema<IGun>(
   {
@@ -25,8 +31,8 @@ const gunSchema = new Schema<IGun>(
     description: { type: String, default: "No description"},
     shots: { type: mongoose.Schema.Types.Mixed, required: true },
     keywords: { type: [String], default: ["No keywords"] },
-    traits: { type: [String], default: ["No traits"]},
-    effects: { type: [String], default: ["No effects"]},
+    traits: { type: [Schema.Types.ObjectId], ref: "trait", default: []},
+    effects: { type: [effects], default: []},
     range_min: { type: Number, required: true},
     range_max: { type: Number, required: true },
   },

@@ -2,21 +2,18 @@ import mongoose, { Schema } from "mongoose";
 
 export interface IAmmo {
   name: string;
-  nickname: string;
-  shortening: string;
   weapon: string;
-  price: number;
-  description: string;
+  price?: number;
+  description?: string;
   damage_type: string;
   strength: number;
   damage: number;
-  special_effects: string;
+  special_effects?: string;
 }
 
 const ammoSchema = new Schema<IAmmo>(
   {
     name: { type: String, required: true },
-    shortening: { type: String, required: true },
     weapon: { type: String, required: true },
     price: { type: Number, default: 0},
     description: { type: String, default: "No description"},

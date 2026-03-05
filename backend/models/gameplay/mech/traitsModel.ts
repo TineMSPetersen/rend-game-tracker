@@ -6,18 +6,20 @@ export interface ITrait {
   effects: {
     modifierType: string;
     modifierAmount: number;
+    modifierPositive: boolean;
     description: string;
   }[]
 }
 
-const traitSchema = new Schema({
+const traitSchema = new Schema<ITrait>({
   name: { type: String, required: true },
   level: { type: Number, default: 1 },
-  effect: [
+  effects: [
     {
       modifierType: { type: String, default: "None" },
       modifierAmount: { type: Number, default: 0 },
-      description: { Type: String, default: "" }
+      modifierPositive: { type: Boolean, default: true},
+      description: { type: String, default: "" }
     }
   ]
 })
