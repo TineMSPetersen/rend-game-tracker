@@ -2,6 +2,7 @@ import type { Request, Response } from "express-serve-static-core";
 import ammoModel from "../models/gameplay/mech/ammoModel.ts";
 import traitModel from "../models/gameplay/mech/traitsModel.ts";
 import gunModel from "../models/gameplay/mech/gunModel.ts";
+import mechModel from "../models/gameplay/mech/mechModel.ts";
 
 const AddAmmo = async (
   req: Request,
@@ -76,4 +77,20 @@ const AddGun = async (req: Request, res: Response): Promise<Response | void> => 
   }
 }
 
-export { AddAmmo, AddTrait, AddGun }
+const AddMech = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const { modelNumber, name, faction, description, price, stats, structure, components, core, cockpit, traits, shield } = req.body;
+
+    const mechData = { modelNumber, name, faction, description, price, stats, shield, structure, components, core, cockpit, traits };
+
+    const mech = new mechModel(mechData);
+    await mech.save();
+    
+    res.status(201).json({ success: true, message: "Mech added!", data: mech });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+export { AddAmmo, AddTrait, AddGun, AddMech }

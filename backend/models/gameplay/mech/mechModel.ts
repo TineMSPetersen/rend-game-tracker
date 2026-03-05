@@ -15,6 +15,14 @@ export interface IMech {
     ex: number;
     ewar: number;
   };
+  shield: {
+    kn: number;
+    em: number;
+    th: number;
+    ch: number;
+    ex: number;
+    structure: number;
+  };
   structure: number;
   components: {
     name: string;
@@ -23,7 +31,7 @@ export interface IMech {
   }[];
   core: number;
   cockpit: number;
-  traits: Types.ObjectId[];
+  traits: string[];
 }
 
 const compoents = new Schema({
@@ -48,11 +56,19 @@ const mechSchema = new Schema<IMech>({
     ex: { type: Number, default: 0 },
     ewar: { type: Number, default: 0 }
   },
+  shield: {
+    kn: { type: Number, default: 0 },
+    em: { type: Number, default: 0 },
+    th: { type: Number, default: 0 },
+    ch: { type: Number, default: 0 },
+    ex: { type: Number, default: 0 },
+    structure: { type: Number, default: 0 }
+  },
   structure: { type: Number, default: 1 },
   components: { type: [compoents], required: true },
   core: { type: Number, default: 1 },
   cockpit: { type: Number, default: 1 },
-  traits: { type: [Schema.Types.ObjectId], default: []}
+  traits: { type: [String], default: []}
 })
 
 const mechModel = mongoose.models.mech || mongoose.model<IMech>("mech", mechSchema);
