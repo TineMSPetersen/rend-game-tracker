@@ -19,7 +19,7 @@ const mechUpgradeSchema = new Schema({
     {
       modifierType: { type: String, default: "None" },
       modifierAmount: { type: Number, default: 0 },
-      description: { Type: String, default: "" }
+      description: { type: String, default: "" }
     }
   ]
 })

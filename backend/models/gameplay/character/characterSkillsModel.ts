@@ -7,19 +7,21 @@ export interface ICharacterSkill {
     modifierType: string;
     modifierAmount: number;
     description: string;
-  }[]
+  }[];
+  description: string;
 }
 
 const characterSkillSchema = new Schema({
   name: { type: String, required: true },
   level: { type: Number, default: 1 },
-  effect: [
+  effects: [
     {
       modifierType: { type: String, default: "None" },
       modifierAmount: { type: Number, default: 0 },
-      description: { Type: String, default: "" }
+      description: { type: String, default: "" }
     }
-  ]
+  ],
+  description: { type: String, default: "" }
 })
 
 const characterSkillModel =

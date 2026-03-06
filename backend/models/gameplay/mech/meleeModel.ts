@@ -2,7 +2,6 @@ import mongoose, { Schema } from "mongoose";
 
 export interface IMelee {
   name: string;
-  nickname: string;
   type: string;
   mounting: string;
   price: number;
@@ -43,7 +42,6 @@ const strength = new Schema(
 const meleeSchema = new Schema<IMelee>(
   {
     name: { type: String, required: true },
-    nickname: { type: String, required: true },
     type: { type: String, default: "melee" },
     mounting: { type: String, required: true },
     price: { type: Number, default: 0},
