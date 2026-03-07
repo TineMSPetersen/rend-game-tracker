@@ -4,6 +4,8 @@ import { Route, Routes } from "react-router-dom";
 import CharacterSheet from "./pages/CharacterSheet";
 
 const App = () => {
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;;
+
   return (
     <>
     <div className="bg-gray-50 min-h-screen">
@@ -12,7 +14,7 @@ const App = () => {
         <Sidebar />
       <div className="w-[70%] mx-auto ml-[max(5vh,25px)] my-8 text-gray-600 text-base">
           <Routes>
-            <Route path="/charactersheet" element={<CharacterSheet />} />
+            <Route path="/charactersheet/:id" element={<CharacterSheet backendUrl={backendUrl} />} />
           </Routes>
         </div>
         </div>
