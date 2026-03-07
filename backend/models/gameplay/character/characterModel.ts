@@ -67,7 +67,7 @@ const gun = new Schema(
 
 const inventory = new Schema(
   {
-    consumableId: { type: Schema.Types.ObjectId, ref: "consumable", required: true },
+    itemId: { type: Schema.Types.ObjectId, ref: "consumable", required: true },
     amount: { type: Number, default: 1 }
   }
 )
@@ -117,7 +117,7 @@ const characterSchema = new Schema<ICharacter>(
     gun: { type: [gun], default: []},
     melee: { type: [Schema.Types.ObjectId], ref: "melee", default: [] },
     mech: { type: Schema.Types.ObjectId, ref: "mech", default: null },
-    inventory: { type: [inventory], deault: [] }
+    inventory: { type: [inventory], default: [] }
   },
   { timestamps: true },
 );

@@ -125,4 +125,52 @@ const AddCharacter = async (
   }
 };
 
-export { AddCharacterSkill, AddCharacter, AddConsumable };
+const GetCharacterInfo = async (
+  req: Request,
+  res: Response,
+): Promise<Response | void> => {
+  try {
+    const { characterId } = req.body;
+
+    if (!characterId.id || typeof characterId.id !== "string") {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid comic Id" });
+    }
+
+    const characterData = await characterModel
+      .findById(characterId.id)
+      .populate("mechUpgrades")
+      .populate("melee")
+      .populate({
+        path: "gun.gunId",
+        model: "gun",
+      })
+      .populate({
+        path: "gun.ammo.ammoId",
+        model: "ammo",
+      })
+      .populate("mech")
+      .populate("skills")
+      .populate({
+        path: "inventory",
+        populate: {
+          path: "itemId",
+          model: "consumable",
+        },
+      });
+
+    if (!characterData) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Character not found" });
+    }
+
+    res.status(201).json({ success: true, characterData });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export { AddCharacterSkill, AddCharacter, AddConsumable, GetCharacterInfo };
