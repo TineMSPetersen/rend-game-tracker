@@ -4,6 +4,7 @@ export interface IMech {
   modelNumber: string;
   name: string;
   faction: string;
+  image: string;
   description: string;
   price: number;
   stats: {
@@ -45,6 +46,7 @@ const mechSchema = new Schema<IMech>({
   modelNumber: { type: String, required: true },
   name: {  type: String, required: true },
   faction: { type: String, default: "None"},
+  image: { type: String, default: "https://images.pexels.com/photos/8566566/pexels-photo-8566566.jpeg"},
   description: { type: String, default: "No description" },
   price: { type: Number, default: 0 },
   stats: {

@@ -7,7 +7,7 @@ export interface IGun {
   subtype: string;
   price: number;
   description: string;
-  shots: string;
+  shots: string | number;
   keywords: string[];
   traits: Types.ObjectId[];
   effects: object[];

@@ -8,7 +8,7 @@ import MechUpgrades from "../components/charactersheet/MechUpgrades";
 import Weapons from "../components/charactersheet/Weapons";
 import Mech from "../components/charactersheet/Mech";
 import CharacterSkills from "../components/charactersheet/CharacterSkills";
-import Inventory from "../components/Inventory";
+import Inventory from "../components/charactersheet/Inventory";
 
 type CharacterSheetProps = {
   backendUrl: string;
@@ -44,6 +44,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
     <div>
       <Top
         name={characterInfo.name}
+        alive={characterInfo.alive}
         stats={characterInfo.stats}
         xp={characterInfo.xp}
         gs={characterInfo.gs}
@@ -60,9 +61,10 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
         </section>
         <section id="right" className="flex flex-col gap-10">
           <Weapons gun={characterInfo.gun} />
-          <Mech mech={characterInfo.mech} />
         </section>
       </div>
+
+        <Mech mech={characterInfo.mech} />
       <hr className="my-10"></hr>
 
       <div className="grid grid-cols-[2fr_5fr] gap-10">

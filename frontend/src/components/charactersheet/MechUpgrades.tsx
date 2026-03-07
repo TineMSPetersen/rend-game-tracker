@@ -6,28 +6,33 @@ type MechUpgrade = {
     modifierAmount: number;
     description: string;
   }[];
-}
+};
 
 type MechUpgradeProps = {
   mechUpgrades: MechUpgrade[];
-}
+};
 
-const MechUpgrades = ({mechUpgrades}: MechUpgradeProps) => {
+const MechUpgrades = ({ mechUpgrades }: MechUpgradeProps) => {
   return (
     <div id="mech_upgrades">
-            <h3 className="text-lg mb-5">Upgrades</h3>
-            <ul className="flex flex-col gap-2">
-              {mechUpgrades.map((item: MechUpgrade, index: number) => (
-                <li
-                  key={index}
-                  className="border-2 border-black rounded-md py-2 px-4 relative group"
-                >
-                  <p>{item.name}</p>
-                </li>
+      <h3 className="text-lg mb-5">Upgrades</h3>
+      <ul className="flex flex-col gap-2">
+        {mechUpgrades.map((item: MechUpgrade, index: number) => (
+          <li
+            key={index}
+            className="border-2 border-black rounded-md py-2 px-4 relative group"
+          >
+            <p>{item.name}</p>
+            <div className="absolute bottom-full left-0 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-9999 w-150 min-w-150">
+              {item.effect.map((effectItem, effectIndex) => (
+                <p key={effectIndex}>{effectItem.description}</p>
               ))}
-            </ul>
-          </div>
-  )
-}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
-export default MechUpgrades
+export default MechUpgrades;

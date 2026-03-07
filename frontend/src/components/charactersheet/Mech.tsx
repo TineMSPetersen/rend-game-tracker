@@ -1,5 +1,3 @@
-import { character } from "../../assets/data";
-
 type Component = {
   structure: number;
   shortening: string;
@@ -16,6 +14,7 @@ type Mech = {
     ex: number;
     ewar: number;
   };
+  image: string;
   structure: number;
   cockpit: number;
   core: number;
@@ -28,9 +27,9 @@ type MechProps = {
 
 const Mech = ({ mech }: MechProps) => {
   return (
-    <section id="mech" className="grid grid-cols-[1fr_4fr_3fr] gap-10">
+    <section id="mech" className="grid grid-cols-[2fr_5fr_4fr] gap-10 mt-10 items-center">
       <section id="stats">
-        <div className="flex flex-col items-center mb-5 relative group">
+        <div className="flex flex-col items-center justify-center mb-5 relative group">
           <div className="w-10 h-10 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">
             {mech.stats.movement}
           </div>
@@ -38,7 +37,7 @@ const Mech = ({ mech }: MechProps) => {
             M
           </div>
           {/* Tooltip */}
-          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
             Movement
           </div>
         </div>
@@ -51,7 +50,7 @@ const Mech = ({ mech }: MechProps) => {
               KN
             </div>
             {/* Tooltip */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
               Kinetic
             </div>
           </li>
@@ -63,8 +62,8 @@ const Mech = ({ mech }: MechProps) => {
               CH
             </div>
             {/* Tooltip */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
-              CHEM
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+              Chemical
             </div>
           </li>
           <li className="flex flex-col items-center relative group">
@@ -75,8 +74,8 @@ const Mech = ({ mech }: MechProps) => {
               EM
             </div>
             {/* Tooltip */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
-              EM
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+              Electro-Magnetic
             </div>
           </li>
           <li className="flex flex-col items-center relative group">
@@ -88,8 +87,8 @@ const Mech = ({ mech }: MechProps) => {
             </div>
 
             {/* Tooltip */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
-              TH
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+              Thermal
             </div>
           </li>
           <li className="flex flex-col items-center relative group">
@@ -101,8 +100,8 @@ const Mech = ({ mech }: MechProps) => {
             </div>
 
             {/* Tooltip */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
-              EX
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+              Explosive
             </div>
           </li>
           <li className="flex flex-col items-center relative group">
@@ -114,18 +113,18 @@ const Mech = ({ mech }: MechProps) => {
             </div>
 
             {/* Tooltip */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
               Electronic Warfare
             </div>
           </li>
         </ul>
       </section>
 
-      <img src={character.mech_stats.image} alt="" />
+      <img src={mech.image} alt="" />
 
-      <section id="structure" className="flex gap-10">
-        <div>
-          <div className="flex flex-col items-center mb-5 relative group">
+      <section id="structure" className="flex gap-20 justify-center items-center">
+        <div className="flex flex-col gap-5">
+          <div className="flex flex-col items-center relative group">
             <div className="w-10 h-10 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">
               {mech.structure}
             </div>
@@ -133,12 +132,12 @@ const Mech = ({ mech }: MechProps) => {
               TTL
             </div>
             {/* Tooltip */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
               Total Structure
             </div>
           </div>
 
-          <div className="flex flex-col items-center mb-5">
+          <div className="flex flex-col items-center">
             <div className="w-10 h-10 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">
               {mech.cockpit}
             </div>
@@ -147,7 +146,7 @@ const Mech = ({ mech }: MechProps) => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center mb-5">
+          <div className="flex flex-col items-center">
             <div className="w-10 h-10 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">
               {mech.core}
             </div>
@@ -170,7 +169,7 @@ const Mech = ({ mech }: MechProps) => {
               </div>
 
               {/* Tooltip */}
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
                 {item.name}
               </div>
             </li>

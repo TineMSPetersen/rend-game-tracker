@@ -6,7 +6,8 @@ export interface IMechUpgrade {
   price: number;
   effects: {
     modifierType: string;
-    modifierAmount: number;
+    modifierAmount: number | string;
+    modifierPositive: boolean;
     description: string;
   }[]
 }
@@ -18,7 +19,8 @@ const mechUpgradeSchema = new Schema({
   effect: [
     {
       modifierType: { type: String, default: "None" },
-      modifierAmount: { type: Number, default: 0 },
+      modifierAmount: { type: mongoose.Schema.Types.Mixed, default: 0 },
+      modifierPositive: { type: Boolean, default: true },
       description: { type: String, default: "" }
     }
   ]

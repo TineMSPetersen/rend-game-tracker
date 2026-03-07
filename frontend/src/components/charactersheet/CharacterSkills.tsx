@@ -1,6 +1,9 @@
 type Skill = {
   name: string;
   description: string;
+  effects: {
+    description: string;
+  }[]
 }
 
 type CharacterSkillProps = {
@@ -24,7 +27,10 @@ const CharacterSkills = ({characterSkills}: CharacterSkillProps) => {
                 >
                   <p>{item.name}</p>
                   <div className="absolute bottom-full left-0 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-9999 w-150 min-w-150">
-                    <p>{item.description}</p>
+                    {item.effects.map((effectItem, effectIndex) => (
+                      <p key={effectIndex}>{effectItem.description}</p>
+                    ))}
+                    <p className="text-sm italic">{item.description}</p>
                   </div>
                 </li>
               ))}
