@@ -5,7 +5,7 @@ type StatusEffectProps = {
 const StatusEffects = ({ status_effects }: StatusEffectProps) => {
   return (
     <div id="status_effects">
-      <h3 className="text-lg mb-5">Status effect:</h3>
+      <h3 className="text-2xl font-bold mb-5">Status effect:</h3>
       {status_effects.length === 0 ? (
         <p className="border-2 border-black rounded-md py-2 px-4">
           No status effects

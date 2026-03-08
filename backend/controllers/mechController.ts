@@ -223,4 +223,21 @@ const AddMechUpgrade = async (
   }
 }
 
-export { AddAmmo, AddTrait, AddGun, AddMelee, AddMech, AddMechUpgrade };
+const GetMechList = async (
+  req: Request,
+  res: Response,
+): Promise<Response | void> => {
+  try {
+    const mechs = await mechModel.find();
+
+    res.json({
+      success: true,
+      mechs
+    });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+} 
+
+export { AddAmmo, AddTrait, AddGun, AddMelee, AddMech, AddMechUpgrade, GetMechList };

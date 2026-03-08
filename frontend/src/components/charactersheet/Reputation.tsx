@@ -29,7 +29,7 @@ const Reputation = ({ reputation }: ReputationProps) => {
 
   return (
     <div id="reputation">
-      <h3 className="text-lg mb-5">Reputation</h3>
+      <h3 className="text-2xl font-bold mb-5">Reputation</h3>
       <ul className="flex flex-col gap-2">
 
         <li className="flex gap-2 items-center">

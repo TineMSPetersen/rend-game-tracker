@@ -2,7 +2,7 @@ type Component = {
   structure: number;
   shortening: string;
   name: string;
-}
+};
 
 type Mech = {
   stats: {
@@ -27,7 +27,10 @@ type MechProps = {
 
 const Mech = ({ mech }: MechProps) => {
   return (
-    <section id="mech" className="grid grid-cols-[2fr_5fr_4fr] gap-10 mt-10 items-center">
+    <section
+      id="mech"
+      className="grid grid-cols-[2fr_5fr_4fr] gap-10 items-center"
+    >
       <section id="stats">
         <div className="flex flex-col items-center justify-center mb-5 relative group">
           <div className="w-10 h-10 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">
@@ -122,7 +125,10 @@ const Mech = ({ mech }: MechProps) => {
 
       <img src={mech.image} alt="" />
 
-      <section id="structure" className="flex gap-20 justify-center items-center">
+      <section
+        id="structure"
+        className="flex gap-20 justify-center items-center"
+      >
         <div className="flex flex-col gap-5">
           <div className="flex flex-col items-center relative group">
             <div className="w-10 h-10 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">

@@ -39,7 +39,7 @@ type WeaponProps = {
 const Weapons = ({ gun }: WeaponProps) => {
   return (
     <section id="Weapons">
-      <h3 className="text-lg mb-5">Weapons:</h3>
+      <h3 className="text-2xl font-bold mb-5">Weapons & Ammo:</h3>
       <ul className="flex flex-col gap-2">
         {gun.map(
           (item, index) =>

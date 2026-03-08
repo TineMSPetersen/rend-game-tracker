@@ -15,19 +15,17 @@ type MechUpgradeProps = {
 const MechUpgrades = ({ mechUpgrades }: MechUpgradeProps) => {
   return (
     <div id="mech_upgrades">
-      <h3 className="text-lg mb-5">Upgrades</h3>
+      <h3 className="text-2xl font-bold mb-5">Upgrades</h3>
       <ul className="flex flex-col gap-2">
         {mechUpgrades.map((item: MechUpgrade, index: number) => (
           <li
             key={index}
-            className="border-2 border-black rounded-md py-2 px-4 relative group"
+            className="border-2 border-black rounded-md py-2 px-4"
           >
-            <p>{item.name}</p>
-            <div className="absolute bottom-full left-0 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-9999 w-150 min-w-150">
-              {item.effect.map((effectItem, effectIndex) => (
-                <p key={effectIndex}>{effectItem.description}</p>
+            <p className="text-lg font-bold">{item.name}</p>
+            {item.effect.map((effectItem, effectIndex) => (
+                <p className="text-md" key={effectIndex}>{effectItem.description}</p>
               ))}
-            </div>
           </li>
         ))}
       </ul>
