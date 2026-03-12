@@ -74,25 +74,45 @@ const AddCharacter = async (
   req: Request,
   res: Response,
 ): Promise<Response | void> => {
+  
   try {
-    const {
-      name,
-      alive,
-      stats,
-      xp,
-      level,
-      gs,
-      origin,
-      alignment,
-      reputation,
-      status_effect,
-      skills,
-      mechUpgrades,
-      gun,
-      melee,
-      mech,
-      inventory,
-    } = req.body;
+    
+    
+    const { name, origin, mech } = req.body;
+    const alive = true;
+    const xp = 0;
+    const level = 0;
+    const gs = 0;
+    const alignment = "none";
+    const reputation = {
+      "raytech": {
+        "rep": 0,
+        "status": "neutral"
+      },
+      "smith": {
+        "rep": 0,
+        "status": "neutral"
+      },
+      "shimizawa": {
+        "rep": 0,
+        "status": "neutral"
+      },
+      "ugc": {
+        "rep": 0,
+        "status": "neutral"
+      },
+      "amg": {
+        "rep": 0,
+        "status": "neutral"
+      }
+    }
+    const status_effects: string[] = [];
+    const inventory: string[] = [];
+    const stats = req.body.stats;
+    const skills = req.body.skills;
+    const mechUpgrades = req.body.mechUpgrades || [];
+    const gun = req.body.gun || [];
+    const melee = req.body.melee || [];
 
     const characterData = {
       name,
@@ -104,14 +124,22 @@ const AddCharacter = async (
       origin,
       alignment,
       reputation,
-      status_effect,
+      status_effects,
       skills,
       mechUpgrades,
       gun,
       melee,
       mech,
-      inventory,
+      inventory
     };
+
+    const gunObjects = gun.map((id: string) => ({
+      gunId: id,
+      ammo: [],
+      equipped: false,
+    }));
+
+    characterData.gun = gunObjects;
 
     const character = new characterModel(characterData);
     await character.save();
@@ -173,4 +201,24 @@ const GetCharacterInfo = async (
   }
 };
 
-export { AddCharacterSkill, AddCharacter, AddConsumable, GetCharacterInfo };
+const getCharacterSkills = async (
+  req: Request,
+  res: Response,
+): Promise<Response | void> => {
+  try {
+    const skills = await characterSkillModel.find();
+
+    res.json({
+      success: true,
+      skills,
+    });
+  } catch (error) {}
+};
+
+export {
+  AddCharacterSkill,
+  AddCharacter,
+  AddConsumable,
+  GetCharacterInfo,
+  getCharacterSkills,
+};

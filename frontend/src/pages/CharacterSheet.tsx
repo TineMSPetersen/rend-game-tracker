@@ -99,8 +99,18 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
       </div>
 
       <hr className="my-10"></hr>
+      <hr className="my-10"></hr>
 
-      <div className="grid grid-cols-[2fr_4fr_4fr] gap-10">
+      <Top
+        name={characterInfo.name}
+        alive={characterInfo.alive}
+        stats={characterInfo.stats}
+        xp={characterInfo.xp}
+        gs={characterInfo.gs}
+        origin={characterInfo.origin}
+        alignment={characterInfo.alignment}
+      />
+      <div className="grid grid-cols-[2fr_4fr_4fr] gap-10 mt-10">
         <Reputation reputation={characterInfo.reputation} />
         <CharacterSkills characterSkills={characterInfo.skills} />
         <Inventory inventory={characterInfo.inventory} />

@@ -5,8 +5,8 @@ type ReputationProps = {
     raytech: { rep: number; status: string };
     smith: { rep: number; status: string };
     shimizawa: { rep: number; status: string };
-    vcg: { rep: number; status: string };
-    nmg: { rep: number; status: string };
+    ugc: { rep: number; status: string };
+    amg: { rep: number; status: string };
   };
 };
 
@@ -91,11 +91,11 @@ const Reputation = ({ reputation }: ReputationProps) => {
             </div>
           </div>
           <div className="w-15 h-15 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">
-            {reputation.vcg.rep}
+            {reputation.ugc.rep}
           </div>
-          <div className={`relative group mt-1 w-7 h-7 rounded-full border-2 border-black ${getStatusColor(reputation.vcg.status)}`}>
+          <div className={`relative group mt-1 w-7 h-7 rounded-full border-2 border-black ${getStatusColor(reputation.ugc.status)}`}>
             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
-              {getStatusText(reputation.vcg.status)}
+              {getStatusText(reputation.ugc.status)}
             </div>
           </div>
         </li>
@@ -108,11 +108,11 @@ const Reputation = ({ reputation }: ReputationProps) => {
             </div>
           </div>
           <div className="w-15 h-15 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">
-            {reputation.nmg.rep}
+            {reputation.amg.rep}
           </div>
-          <div className={`relative group mt-1 w-7 h-7 rounded-full border-2 border-black ${getStatusColor(reputation.nmg.status)}`}>
+          <div className={`relative group mt-1 w-7 h-7 rounded-full border-2 border-black ${getStatusColor(reputation.amg.status)}`}>
             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
-              {getStatusText(reputation.nmg.status)}
+              {getStatusText(reputation.amg.status)}
             </div>
           </div>
         </li>

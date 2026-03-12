@@ -208,36 +208,87 @@ const AddMechUpgrade = async (
   res: Response,
 ): Promise<Response | void> => {
   try {
-
     const { name, level, price, effects } = req.body;
 
-    const upgradeData = { name, level, price, effects }
+    const upgradeData = { name, level, price, effects };
 
     const mechUpgrade = new mechUpgradeModel(upgradeData);
     await mechUpgrade.save();
 
-    res.status(201).json({ success: true, message: "Mech added!", data: mechUpgrade });
+    res
+      .status(201)
+      .json({ success: true, message: "Mech added!", data: mechUpgrade });
   } catch (error: any) {
     console.error(error);
     res.status(500).json({ success: false, message: error.message });
   }
-}
+};
 
 const GetMechList = async (
   req: Request,
   res: Response,
 ): Promise<Response | void> => {
   try {
-    const mechs = await mechModel.find();
+    const mechs = await mechModel
+      .find()
+      .populate([
+        { path: "defaultWeapon.gun" },
+        { path: "defaultWeapon.melee" },
+      ]);
 
     res.json({
       success: true,
-      mechs
+      mechs,
     });
   } catch (error: any) {
     console.error(error);
     res.status(500).json({ success: false, message: error.message });
   }
-} 
+};
 
-export { AddAmmo, AddTrait, AddGun, AddMelee, AddMech, AddMechUpgrade, GetMechList };
+const GetWeaponsList = async (
+  req: Request,
+  res: Response,
+): Promise<Response | void> => {
+  try {
+    const guns = await gunModel.find();
+    const melee = await meleeModel.find();
+
+    res.json({
+      success: true,
+      data: { guns, melee }
+    })
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+const GetUpgradeList = async (
+  req: Request,
+  res: Response,
+): Promise<Response | void> => {
+  try {
+    const mechUpgrades = await mechUpgradeModel.find();
+
+    res.json({
+      success: true,
+      mechUpgrades
+    })
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+export {
+  AddAmmo,
+  AddTrait,
+  AddGun,
+  AddMelee,
+  AddMech,
+  AddMechUpgrade,
+  GetMechList,
+  GetWeaponsList,
+  GetUpgradeList
+};

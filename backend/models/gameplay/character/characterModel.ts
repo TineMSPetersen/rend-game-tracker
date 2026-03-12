@@ -102,11 +102,11 @@ const characterSchema = new Schema<ICharacter>(
         rep: { type: Number, default: 0 },
         status: { type: String, enum: ["abhorred", "detested", "disliked", "neutral", "liked", "valued", "cherished"], default: "neutral" }
       },
-      vcg: {
+      ugc: {
         rep: { type: Number, default: 0 },
         status: { type: String, enum: ["abhorred", "detested", "disliked", "neutral", "liked", "valued", "cherished"], default: "neutral" }
       },
-      nmg: {
+      amg: {
         rep: { type: Number, default: 0 },
         status: { type: String, enum: ["abhorred", "detested", "disliked", "neutral", "liked", "valued", "cherished"], default: "neutral" }
       },
