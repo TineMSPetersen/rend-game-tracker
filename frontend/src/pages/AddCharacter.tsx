@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 type AddCharacterProps = { backendUrl: string };
 
@@ -33,6 +33,7 @@ type MechTypes = {
 };
 
 const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
+  const navigate = useNavigate();
   const defaultJockey = 24;
   const [jugdement, setJudgement] = useState(0);
   const [optimization, setOptimization] = useState(0);
@@ -180,7 +181,7 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
       const gunsData = guns.map((gunId) => ({
         gunId,
         ammo: [],
-        equipped: false,
+        equipped: true,
       }));
 
       if (upgradeSlots) {
@@ -219,6 +220,8 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
         `${backendUrl}/api/character/add-character`,
         data,
       );
+
+      navigate('/characters')
       console.log(response.data);
     } catch (error) {
       console.error(error);
@@ -477,6 +480,7 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
                   id="skill1"
                   value={skill1}
                 >
+                  <option value="">Pick skill</option>
                   {skillsData.map((item: SkillTypes, index: number) => (
                     <option key={index} value={item._id}>
                       {item.name} - {item.effects[0].description}
@@ -495,6 +499,7 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
                   id="skill2"
                   value={skill2}
                 >
+                  <option value="">Pick skill</option>
                   {skillsData.map((item: SkillTypes, index: number) => (
                     <option key={index} value={item._id}>
                       {item.name} - {item.effects[0].description}
