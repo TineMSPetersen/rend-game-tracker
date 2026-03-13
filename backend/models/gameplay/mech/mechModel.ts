@@ -38,7 +38,7 @@ export interface IMech {
     melee: Types.ObjectId[];
   }
   weaponSlots: {
-    weapon_type: string;
+    weaponType: string;
     mounting: string;
     amount: number;
   }[];

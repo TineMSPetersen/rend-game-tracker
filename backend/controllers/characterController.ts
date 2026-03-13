@@ -113,6 +113,7 @@ const AddCharacter = async (
     const mechUpgrades = req.body.mechUpgrades || [];
     const gun = req.body.gun || [];
     const melee = req.body.melee || [];
+    
 
     const characterData = {
       name,
@@ -132,14 +133,6 @@ const AddCharacter = async (
       mech,
       inventory
     };
-
-    const gunObjects = gun.map((id: string) => ({
-      gunId: id,
-      ammo: [],
-      equipped: false,
-    }));
-
-    characterData.gun = gunObjects;
 
     const character = new characterModel(characterData);
     await character.save();
@@ -212,8 +205,28 @@ const getCharacterSkills = async (
       success: true,
       skills,
     });
-  } catch (error) {}
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
 };
+
+const CharacterList = async (
+  req: Request,
+  res: Response,
+): Promise<Response | void> => {
+  try {
+    const characters = await characterModel.find();
+
+    res.json({
+      success: true,
+      characters
+    })
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
 
 export {
   AddCharacterSkill,
@@ -221,4 +234,5 @@ export {
   AddConsumable,
   GetCharacterInfo,
   getCharacterSkills,
+  CharacterList
 };

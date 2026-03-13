@@ -57,7 +57,7 @@ const gun = new Schema(
       {
         ammoId: { type: Schema.Types.ObjectId, ref: "ammo", required: true },
         amount: { type: Number, default: 0 },
-        selected: { type: Boolean, default: false }
+        selected: { type: Boolean, default: true }
       }
     ],
     equipped: { type: Boolean, default: false }

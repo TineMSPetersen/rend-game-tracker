@@ -3,23 +3,22 @@ import { assets } from "../assets/assets";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 
-type AddCharacterProps = {
-  backendUrl: string;
-};
+type AddCharacterProps = { backendUrl: string };
 
 type SkillTypes = {
   _id: string;
   name: string;
   level: number;
-  effects: {
-    description: string;
-  }[];
+  effects: { description: string }[];
 };
-
-type WeaponSlots = {
-  weaponType: string;
-  mounting: string;
-  amount: number;
+type WeaponSlots = { weaponType: string; mounting: string; amount: number };
+type Weapon = { _id: string; name: string };
+type Gun = { _id: string; name: string };
+type Melee = { _id: string; name: string; mounting: string };
+type UpgradeType = {
+  _id: string;
+  name: string;
+  type: "passive" | "trigger" | "bio";
 };
 
 type MechTypes = {
@@ -28,57 +27,24 @@ type MechTypes = {
   image: string;
   name: string;
   modelNumber: string;
-
-  defaultWeapon: {
-    gun: Weapon[];
-    melee: Weapon[];
-  };
-
+  defaultWeapon: { gun: Weapon[]; melee: Weapon[] };
   weaponSlots: WeaponSlots[];
-
-  upgradeSlots: {
-    passive: number;
-    trigger: number;
-    bio: number;
-  };
-};
-
-type Weapon = {
-  _id: string;
-  name: string;
-};
-
-type Gun = {
-  _id: string;
-  name: string;
-};
-
-type Melee = {
-  _id: string;
-  name: string;
-  mounting: string;
-};
-
-type UpgradeType = {
-  _id: string;
-  name: string;
-  type: "passive" | "trigger" | "bio";
+  upgradeSlots: { passive: number; trigger: number; bio: number };
 };
 
 const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
-  const defaultJokey = 24;
+  const defaultJockey = 24;
   const [jugdement, setJudgement] = useState(0);
   const [optimization, setOptimization] = useState(0);
   const [charisma, setCharisma] = useState(0);
   const [knowledge, setKnowledge] = useState(0);
   const [endurance, setEndurance] = useState(0);
   const [statYield, setStatsYield] = useState(0);
-  const [jockey, setJockey] = useState(24);
+  const [jockey, setJockey] = useState(defaultJockey);
 
   const [origin, setOrigin] = useState("none");
 
   const [skillsData, setSkillsData] = useState<SkillTypes[]>([]);
-
   const [skill1, setSkill1] = useState("");
   const [skill2, setSkill2] = useState("");
 
@@ -90,10 +56,7 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
   const [meleeList, setMeleeList] = useState<Melee[]>([]);
   const [defaultWeapon, setDefaultWeapon] = useState<
     MechTypes["defaultWeapon"]
-  >({
-    gun: [],
-    melee: [],
-  });
+  >({ gun: [], melee: [] });
   const [weaponSlots, setWeaponSlots] = useState<MechTypes["weaponSlots"]>([]);
 
   const [upgradeList, setUpgradeList] = useState<UpgradeType[]>([]);
@@ -127,22 +90,17 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
   const changeStats = ({ stat, pos }: { stat: string; pos: boolean }) => {
     const setter = statSetters[stat];
     if (!setter) return;
-
     const delta = pos ? 1 : -1;
-
     if (pos && jockey <= 0) return;
     if (pos && statValues[stat] >= 10) return;
     if (!pos && statValues[stat] <= 0) return;
-
     setter((prev) => prev + delta);
     setJockey((prev) => prev - delta);
   };
 
   const changeMech = (mechId: string) => {
-    const mechInfo = mechList.find((mech) => mech._id === mechId);
-
+    const mechInfo = mechList.find((m) => m._id === mechId);
     if (!mechInfo) return;
-
     setMech(mechId);
     setDefaultWeapon(mechInfo.defaultWeapon);
     setWeaponSlots(mechInfo.weaponSlots);
@@ -154,7 +112,6 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
       const response = await axios.get(
         `${backendUrl}/api/character/get-skills`,
       );
-
       if (response.data.success) {
         const levelOneSkills = response.data.skills.filter(
           (skill: SkillTypes) => skill.level === 1,
@@ -169,11 +126,7 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
   const getMechList = async () => {
     try {
       const response = await axios.get(`${backendUrl}/api/mech/mechlist`);
-
-      if (response.data.success) {
-        console.log(response.data.mechs);
-        setMechList(response.data.mechs);
-      }
+      if (response.data.success) setMechList(response.data.mechs);
     } catch (error) {
       console.log(error);
     }
@@ -182,10 +135,9 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
   const getWeaponList = async () => {
     try {
       const response = await axios.get(`${backendUrl}/api/mech/weaponlist`);
-
       if (response.data.success) {
-        setGunList(response.data.data.guns);
-        setMeleeList(response.data.data.melee);
+        setGunList(response.data.data.guns || []);
+        setMeleeList(response.data.data.melee || []);
       }
     } catch (error) {
       console.log(error);
@@ -195,90 +147,83 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
   const getUpgradeList = async () => {
     try {
       const response = await axios.get(`${backendUrl}/api/mech/upgradelist`);
-
-      if (response.data.success) {
-        setUpgradeList(response.data.mechUpgrades);
-      }
+      if (response.data.success)
+        setUpgradeList(response.data.mechUpgrades || []);
     } catch (error) {
       console.log(error);
     }
   };
 
   const filterMechs = (faction: string) => {
-    const mechs = mechList.filter(
-      (mech: MechTypes) => mech.faction === faction,
-    );
+    const mechs = mechList.filter((m) => m.faction === faction);
     setFilteredMechs(mechs);
+    setMech("");
   };
 
-const onSumbitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const form = new FormData(e.currentTarget);
+      const guns: string[] = [];
+      const melee: string[] = [];
+      const mechUpgrades: string[] = [];
 
-  try {
-    const form = new FormData(e.currentTarget);
-
-    const guns: string[] = [];
-    const melee: string[] = [];
-    const mechUpgrades: string[] = [];
-
-    weaponSlots.forEach((slot, index) => {
-      for (let i = 0; i < slot.amount; i++) {
-        const value = form.get(`weapon-${index}-${i}`) as string;
-
-        if (!value) continue;
-
-        const type = slot.weaponType.toLowerCase();
-
-        if (type === "gun") guns.push(value);
-        if (type === "melee") melee.push(value);
-      }
-    });
-
-    if (upgradeSlots) {
-      Object.entries(upgradeSlots).forEach(([type, amount]) => {
-        for (let i = 0; i < amount; i++) {
-          const value = form.get(`upgrade-${type}-${i}`) as string;
-
-          if (value) mechUpgrades.push(value);
+      weaponSlots.forEach((slot, index) => {
+        for (let i = 0; i < slot.amount; i++) {
+          const value = form.get(`weapon-${index}-${i}`) as string;
+          if (!value) continue;
+          if (slot.weaponType.toLowerCase() !== "melee") guns.push(value);
+          if (slot.weaponType.toLowerCase() === "melee") melee.push(value);
         }
       });
+
+      const gunsData = guns.map((gunId) => ({
+        gunId,
+        ammo: [],
+        equipped: false,
+      }));
+
+      if (upgradeSlots) {
+        Object.entries(upgradeSlots).forEach(([type, amount]) => {
+          for (let i = 0; i < amount; i++) {
+            const value = form.get(`upgrade-${type}-${i}`) as string;
+            if (value) mechUpgrades.push(value);
+          }
+        });
+      }
+
+      const stats = {
+        judgement: jugdement,
+        optimization,
+        charisma,
+        knowledge,
+        endurance,
+        yield: statYield,
+      };
+      const skills = [skill1, skill2].filter(Boolean);
+
+      const data = {
+        name,
+        stats,
+        origin,
+        skills,
+        mech,
+        mechUpgrades,
+        gun: gunsData,
+        melee,
+      };
+
+      console.log("Submitting character:", data);
+
+      const response = await axios.post(
+        `${backendUrl}/api/character/add-character`,
+        data,
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
     }
-
-    const stats = {
-      judgement: jugdement,
-      optimization,
-      charisma,
-      knowledge,
-      endurance,
-      yield: statYield
-    };
-
-    const skills = [skill1, skill2].filter(Boolean);
-
-    const data = {
-      name,
-      stats,
-      origin,
-      skills,
-      mech,
-      mechUpgrades,
-      gun: guns,
-      melee
-    };
-
-    console.log("Submitting character:", data);
-
-    const response = await axios.post(
-      `${backendUrl}/api/character/add-character`,
-      data
-    );
-
-    console.log(response.data);
-
-  } catch (error) {
-    console.error(error);
-  }
-};
+  };
 
   useEffect(() => {
     getCharacterSkills();
@@ -286,21 +231,21 @@ const onSumbitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     getWeaponList();
     getUpgradeList();
   }, []);
-
   useEffect(() => {
     filterMechs(origin);
-    setMech("");
   }, [origin]);
-
   useEffect(() => {
     changeMech(mech);
   }, [mech]);
+  useEffect(() => {
+    console.log("Loaded guns:", gunList);
+  }, [gunList]);
 
   return (
     <div>
       <h1 className="text-4xl font-bold mb-5">Add New Character</h1>
 
-      <form className="" onSubmit={onSumbitHandler}>
+      <form className="" onSubmit={onSubmitHandler}>
         <h2 className="text-2xl font-bold mb-5">Character Info</h2>
         <div id="character" className="flex flex-col gap-5">
           <div>
@@ -326,7 +271,7 @@ const onSumbitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
 
               <p className="md">
                 You start with{" "}
-                <span className="font-semibold">{defaultJokey}</span>{" "}
+                <span className="font-semibold">{defaultJockey}</span>{" "}
                 J.O.C.K.E.Y points - You currently have{" "}
                 <span className="font-bold text-xl">{jockey}</span> points left
               </p>
@@ -628,68 +573,75 @@ const onSumbitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         </div>
 
         <div>
-          {weaponSlots && (
-            <div>
-              <h3 className="text-xl mt-5">Select weapons:</h3>
-              <p>
-                {weaponSlots.map((item, index) => (
-                  <div>
-                    {item.weaponType === "melee" ? (
-                      <div>
-                        <p className="capitalize text-lg">{item.mounting}</p>
-                        <div className="flex gap-5">
-                          {Array.from({ length: item.amount }).map(
-                            (_, slotIndex) => (
+          <div>
+            <h3 className="text-xl mt-5">Select weapons:</h3>
+            {weaponSlots.length > 0 && (
+              <div>
+                <div>
+                  <h4 className="text-lg">Guns</h4>
+                  {weaponSlots.map((item, index) => {
+                    if (item.weaponType === "melee") return null;
+                    return (
+                      <div key={index}>
+                        {Array.from({ length: item.amount }).map(
+                          (_, slotIndex) => (
+                            <div key={slotIndex}>
+                              <p className="capitalize">{item.weaponType}</p>
                               <select
-                                className="border-2 border-black block w-full py-2 px-4 rounded-md text-sm"
-                                key={slotIndex}
                                 name={`weapon-${index}-${slotIndex}`}
+                                className="border-2 border-black block w-full py-2 px-4 rounded-md text-sm"
+                              >
+                                <option value="">Pick weapon</option>
+                                {gunList.map((g) => (
+                                  <option key={g._id} value={g._id}>
+                                    {g.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          ),
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+                <div>
+                  <h4 className="text-lg">Melee</h4>
+                  {weaponSlots.map((item, index) => {
+                    if (item.weaponType !== "melee") return null;
+                    return (
+                      <div key={index}>
+                        {Array.from({ length: item.amount }).map(
+                          (_, slotIndex) => (
+                            <div key={slotIndex}>
+                              <p className="capitalize">{item.mounting}</p>
+                              <select
+                                name={`weapon-${index}-${slotIndex}`}
+                                className="border-2 border-black block w-full py-2 px-4 rounded-md text-sm"
                               >
                                 <option value="">Pick weapon</option>
                                 {meleeList
                                   .filter(
-                                    (melee) =>
-                                      melee.mounting.toLowerCase() ===
+                                    (m) =>
+                                      m.mounting.toLowerCase() ===
                                       item.mounting.toLowerCase(),
                                   )
-                                  .map((melee, meleeIndex) => (
-                                    <option key={meleeIndex} value={melee._id}>
-                                      {melee.name}
+                                  .map((m) => (
+                                    <option key={m._id} value={m._id}>
+                                      {m.name}
                                     </option>
                                   ))}
                               </select>
-                            ),
-                          )}
-                        </div>
+                            </div>
+                          ),
+                        )}
                       </div>
-                    ) : (
-                      <div>
-                        <p className="capitalize text-lg">{item.weaponType}</p>
-                        <div className="flex gap-5">
-                          {Array.from({ length: item.amount }).map(
-                            (_, slotIndex) => (
-                              <select
-                                className="border-2 border-black block w-full py-2 px-4 rounded-md text-sm"
-                                key={slotIndex}
-                                name={`weapon-${index}-${slotIndex}`}
-                              >
-                                <option value="">Pick weapon</option>
-                                {gunList.map((item, index) => (
-                                  <option key={index} value={item._id}>
-                                    {item.name}
-                                  </option>
-                                ))}
-                              </select>
-                            ),
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </p>
-            </div>
-          )}
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <h2 className="text-2xl font-bold mt-10 mb-5">Mech Skills</h2>
