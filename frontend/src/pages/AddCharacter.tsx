@@ -446,7 +446,7 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
                     className={`flex flex-col gap-2 items-center  border border-black py-3 px-3 rounded-md w-35 cursor-pointer ${origin === "SNC" && "bg-slate-300"} `}
                   >
                     <img src={assets.smith} />
-                    <p>Cog and Smith</p>
+                    <p>Smith and Cox</p>
                   </div>
                   <div
                     onClick={() => setOrigin("RT")}
