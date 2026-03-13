@@ -18,6 +18,7 @@ type Melee = { _id: string; name: string; mounting: string };
 type UpgradeType = {
   _id: string;
   name: string;
+  level: number;
   type: "passive" | "trigger" | "bio";
 };
 
@@ -579,19 +580,19 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
 
         <div>
           <div>
-            <h3 className="text-xl mt-5">Select weapons:</h3>
+            <h3 className="text-xl mt-5 mb-5">Select weapons:</h3>
             {weaponSlots.length > 0 && (
               <div>
                 <div>
-                  <h4 className="text-lg">Guns</h4>
+                  <h4 className="text-lg font-semibold mb-2">Guns:</h4>
                   {weaponSlots.map((item, index) => {
                     if (item.weaponType === "melee") return null;
                     return (
-                      <div key={index}>
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5" key={index}>
                         {Array.from({ length: item.amount }).map(
                           (_, slotIndex) => (
                             <div key={slotIndex}>
-                              <p className="capitalize">{item.weaponType}</p>
+                              <p className="capitalize text-md mb-2">{item.weaponType}:</p>
                               <select
                                 name={`weapon-${index}-${slotIndex}`}
                                 className="border-2 border-black block w-full py-2 px-4 rounded-md text-sm"
@@ -611,15 +612,15 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
                   })}
                 </div>
                 <div>
-                  <h4 className="text-lg">Melee</h4>
+                  <h4 className="text-lg font-semibold mb-2 mt-5">Melee:</h4>
                   {weaponSlots.map((item, index) => {
                     if (item.weaponType !== "melee") return null;
                     return (
                       <div key={index}>
+                        <p className="capitalize text-md mb-2">{item.mounting}:</p>
                         {Array.from({ length: item.amount }).map(
                           (_, slotIndex) => (
-                            <div key={slotIndex}>
-                              <p className="capitalize">{item.mounting}</p>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mb-5" key={slotIndex}>
                               <select
                                 name={`weapon-${index}-${slotIndex}`}
                                 className="border-2 border-black block w-full py-2 px-4 rounded-md text-sm"
@@ -649,7 +650,7 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold mt-10 mb-5">Mech Skills</h2>
+        <h2 className="text-2xl font-bold mt-10 mb-5">Mech Upgrades</h2>
         <div>
           {upgradeSlots && (
             <div className="flex flex-col gap-6">
@@ -657,6 +658,7 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
                 ([type, amount], index) =>
                   amount > 0 && (
                     <div key={index}>
+                      <p className="capitalize text-lg mb-2">{ type }:</p>
                       <div className="flex gap-5">
                         {Array.from({ length: amount }).map((_, slotIndex) => (
                           <select
@@ -668,6 +670,7 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
 
                             {upgradeList
                               .filter((upgrade) => upgrade.type === type)
+                              .filter((upgrade) => upgrade.level < 2)
                               .map((upgrade) => (
                                 <option key={upgrade._id} value={upgrade._id}>
                                   {upgrade.name}

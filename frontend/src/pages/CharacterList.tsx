@@ -33,18 +33,21 @@ const CharacterList: React.FC<CharacterListProps> = ({ backendUrl }) => {
     getCharacterList();
   }, []);
 
+  if (!characterList) return <div>Loading...</div>;
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
-      {characterList.map((item: Character, index) => (
-        <NavLink to={`/charactersheet/${item._id}`}>
-          <div
+    <div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5">
+        {characterList.map((item: Character, index) => (
+          <NavLink
+            to={`/charactersheet/${item._id}`}
             className="w-50 h-30 flex items-center justify-center border-2 border-black rounded-md cursor-pointer"
             key={index}
           >
             <p>{item.name}</p>
-          </div>
-        </NavLink>
-      ))}
+          </NavLink>
+        ))}
+      </div>
     </div>
   );
 };
