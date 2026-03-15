@@ -123,7 +123,7 @@ const characterSchema = new Schema<ICharacter>(
 );
 
 const characterModel =
-  mongoose.models.character ||
+  (mongoose.models.character as mongoose.Model<ICharacter>) ||
   mongoose.model<ICharacter>("character", characterSchema);
 
 export default characterModel;
