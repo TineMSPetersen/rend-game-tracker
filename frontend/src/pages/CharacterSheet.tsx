@@ -9,6 +9,7 @@ import Weapons from "../components/charactersheet/Weapons";
 import Mech from "../components/charactersheet/Mech";
 import CharacterSkills from "../components/charactersheet/CharacterSkills";
 import Inventory from "../components/charactersheet/Inventory";
+import Melee from "../components/charactersheet/Melee";
 
 type CharacterSheetProps = {
   backendUrl: string;
@@ -95,6 +96,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
         </section>
         <section id="right" className="flex flex-col gap-10">
           <Weapons gun={characterInfo.gun} />
+          <Melee melee={characterInfo.melee} />
         </section>
       </div>
 

@@ -2,6 +2,7 @@ import type { Request, Response } from "express-serve-static-core";
 import characterSkillModel from "../models/gameplay/character/characterSkillsModel.ts";
 import characterModel from "../models/gameplay/character/characterModel.ts";
 import consumableModel from "../models/gameplay/character/consumablesModel.ts";
+import meleeModel from "../models/gameplay/mech/meleeModel.ts";
 
 const AddCharacterSkill = async (
   req: Request,
@@ -162,7 +163,7 @@ const GetCharacterInfo = async (
     const characterData = await characterModel
       .findById(characterId.id)
       .populate("mechUpgrades")
-      .populate("melee")
+      .populate({ path: "melee", model: meleeModel })
       .populate({
         path: "gun.gunId",
         model: "gun",
