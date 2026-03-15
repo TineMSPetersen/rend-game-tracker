@@ -11,6 +11,8 @@ import CharacterSkills from "../components/charactersheet/CharacterSkills";
 import Inventory from "../components/charactersheet/Inventory";
 import Melee from "../components/charactersheet/Melee";
 import UseItem from "../components/popup/UseItem";
+import UpdateStructure from "../components/popup/UpdateStructure";
+import ChangeAmmo from "../components/popup/ChangeAmmo";
 
 type CharacterSheetProps = {
   backendUrl: string;
@@ -18,7 +20,6 @@ type CharacterSheetProps = {
 
 const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
   const characterId = useParams();
-  console.log(characterId.id)
   const [characterInfo, setCharacterInfo] = useState<any>(null);
   const [action, setAction] = useState("none");
 
@@ -42,7 +43,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
     getCharacterInfo();
   }, []);
 
-   useEffect(() => {
+  useEffect(() => {
     getCharacterInfo();
   }, [action]);
 
@@ -59,7 +60,11 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
             </button>
             </div>
             
-            <UseItem inventory={characterInfo.inventory} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />
+            {action === "useitem" && <UseItem inventory={characterInfo.inventory} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
+
+            {action === "structure" && <UpdateStructure mech={characterInfo.mech} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
+
+            {action === "ammo" && <ChangeAmmo gun={characterInfo.gun} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
           </div>
         </div>
       )}
@@ -74,10 +79,12 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
         >
           Use Item
         </button>
-        <button className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
+        <button 
+          onClick={() => setAction("structure")}
+          className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
           Update Structure
         </button>
-        <button className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
+        <button onClick={() => setAction("ammo")} className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
           Reload / Change Ammo
         </button>
         <button className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">

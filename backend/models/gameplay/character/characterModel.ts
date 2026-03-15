@@ -2,10 +2,18 @@ import mongoose, { Schema, Types } from "mongoose";
 
 type FactionRep = {
   rep: number;
-  status: "abhorred" | "detested" | "disliked" | "neutral" | "liked" | "valued" | "cherished";
+  status:
+    | "abhorred"
+    | "detested"
+    | "disliked"
+    | "neutral"
+    | "liked"
+    | "valued"
+    | "cherished";
 };
 
 type WeaponAmmo = {
+  _id: string;
   ammoId: string;
   amount: number;
   selected: boolean;
@@ -38,10 +46,11 @@ export interface ICharacter {
   skills: Types.ObjectId[];
   mechUpgrades: Types.ObjectId[];
   gun: {
-  gunId: Types.ObjectId;
-  ammo: WeaponAmmo[];
-  equipped: boolean;
-}[];
+    _id: Types.ObjectId;
+    gunId: Types.ObjectId;
+    ammo: WeaponAmmo[];
+    equipped: boolean;
+  }[];
   melee: Types.ObjectId[];
   mech: Types.ObjectId;
   inventory: {
@@ -57,20 +66,18 @@ const gun = new Schema(
       {
         ammoId: { type: Schema.Types.ObjectId, ref: "ammo", required: true },
         amount: { type: Number, default: 0 },
-        selected: { type: Boolean, default: true }
-      }
+        selected: { type: Boolean, default: true },
+      },
     ],
-    equipped: { type: Boolean, default: false }
+    equipped: { type: Boolean, default: false },
   },
   { _id: true },
 );
 
-const inventory = new Schema(
-  {
-    itemId: { type: Schema.Types.ObjectId, ref: "consumable", required: true },
-    amount: { type: Number, default: 1 }
-  }
-)
+const inventory = new Schema({
+  itemId: { type: Schema.Types.ObjectId, ref: "consumable", required: true },
+  amount: { type: Number, default: 1 },
+});
 
 const characterSchema = new Schema<ICharacter>(
   {
@@ -92,32 +99,104 @@ const characterSchema = new Schema<ICharacter>(
     reputation: {
       raytech: {
         rep: { type: Number, default: 0 },
-        status: { type: String, enum: ["abhorred", "detested", "disliked", "neutral", "liked", "valued", "cherished"], default: "neutral" }
+        status: {
+          type: String,
+          enum: [
+            "abhorred",
+            "detested",
+            "disliked",
+            "neutral",
+            "liked",
+            "valued",
+            "cherished",
+          ],
+          default: "neutral",
+        },
       },
       smith: {
-       rep: { type: Number, default: 0 },
-        status: { type: String, enum: ["abhorred", "detested", "disliked", "neutral", "liked", "valued", "cherished"], default: "neutral" }
+        rep: { type: Number, default: 0 },
+        status: {
+          type: String,
+          enum: [
+            "abhorred",
+            "detested",
+            "disliked",
+            "neutral",
+            "liked",
+            "valued",
+            "cherished",
+          ],
+          default: "neutral",
+        },
       },
       shimizawa: {
         rep: { type: Number, default: 0 },
-        status: { type: String, enum: ["abhorred", "detested", "disliked", "neutral", "liked", "valued", "cherished"], default: "neutral" }
+        status: {
+          type: String,
+          enum: [
+            "abhorred",
+            "detested",
+            "disliked",
+            "neutral",
+            "liked",
+            "valued",
+            "cherished",
+          ],
+          default: "neutral",
+        },
       },
       ugc: {
         rep: { type: Number, default: 0 },
-        status: { type: String, enum: ["abhorred", "detested", "disliked", "neutral", "liked", "valued", "cherished"], default: "neutral" }
+        status: {
+          type: String,
+          enum: [
+            "abhorred",
+            "detested",
+            "disliked",
+            "neutral",
+            "liked",
+            "valued",
+            "cherished",
+          ],
+          default: "neutral",
+        },
       },
       amg: {
         rep: { type: Number, default: 0 },
-        status: { type: String, enum: ["abhorred", "detested", "disliked", "neutral", "liked", "valued", "cherished"], default: "neutral" }
+        status: {
+          type: String,
+          enum: [
+            "abhorred",
+            "detested",
+            "disliked",
+            "neutral",
+            "liked",
+            "valued",
+            "cherished",
+          ],
+          default: "neutral",
+        },
       },
     },
-    status_effects: { type: [Schema.Types.ObjectId], ref: "statuseffect", default: [] },
-    skills: { type: [Schema.Types.ObjectId], ref: "characterskill", default: []},
-    mechUpgrades: { type: [Schema.Types.ObjectId], ref: "mechupgrade", default: [] },
-    gun: { type: [gun], default: []},
+    status_effects: {
+      type: [Schema.Types.ObjectId],
+      ref: "statuseffect",
+      default: [],
+    },
+    skills: {
+      type: [Schema.Types.ObjectId],
+      ref: "characterskill",
+      default: [],
+    },
+    mechUpgrades: {
+      type: [Schema.Types.ObjectId],
+      ref: "mechupgrade",
+      default: [],
+    },
+    gun: { type: [gun], default: [] },
     melee: { type: [Schema.Types.ObjectId], ref: "melee", default: [] },
     mech: { type: Schema.Types.ObjectId, ref: "mech", default: null },
-    inventory: { type: [inventory], default: [] }
+    inventory: { type: [inventory], default: [] },
   },
   { timestamps: true },
 );
