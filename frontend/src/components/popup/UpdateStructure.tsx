@@ -1,4 +1,4 @@
-import { useState } from "react";
+/* import { useState } from "react";
 
 type Mech = {
   structure: number;
@@ -45,7 +45,6 @@ const UpdateStructure = ({
             <div className="-mt-2 w-10 h-7 flex items-center justify-center border-2 border-black rounded-md bg-white font-bold">
               TTL
             </div>
-            {/* Tooltip */}
             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
               Total Structure
             </div>
@@ -82,4 +81,4 @@ const UpdateStructure = ({
   );
 };
 
-export default UpdateStructure;
+export default UpdateStructure; */

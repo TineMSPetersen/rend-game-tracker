@@ -11,8 +11,8 @@ import CharacterSkills from "../components/charactersheet/CharacterSkills";
 import Inventory from "../components/charactersheet/Inventory";
 import Melee from "../components/charactersheet/Melee";
 import UseItem from "../components/popup/UseItem";
-import UpdateStructure from "../components/popup/UpdateStructure";
 import ChangeAmmo from "../components/popup/ChangeAmmo";
+import ChangeStatusEffect from "../components/popup/ChangeStatusEffect";
 
 type CharacterSheetProps = {
   backendUrl: string;
@@ -62,9 +62,9 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
             
             {action === "useitem" && <UseItem inventory={characterInfo.inventory} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
 
-            {action === "structure" && <UpdateStructure mech={characterInfo.mech} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
-
             {action === "ammo" && <ChangeAmmo gun={characterInfo.gun} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
+
+            {action === "status" && <ChangeStatusEffect backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} status={characterInfo.status_effects} />}
           </div>
         </div>
       )}
@@ -87,7 +87,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
         <button onClick={() => setAction("ammo")} className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
           Reload / Change Ammo
         </button>
-        <button className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
+        <button onClick={() => setAction("status")} className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
           Add / Remove Status Effect
         </button>
       </div>

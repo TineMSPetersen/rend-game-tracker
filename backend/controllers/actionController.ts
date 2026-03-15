@@ -100,4 +100,54 @@ const ChangeAmmo = async (
   }
 };
 
-export { UseItem, ChangeAmmo };
+const AddStatusEffect = async (
+  req: Request,
+  res: Response,
+): Promise<Response | void> => {
+  try {
+    const { characterId, statusEffect } = req.body;
+
+
+    const character = await characterModel.findByIdAndUpdate(
+      characterId,
+      { $push: { status_effects: statusEffect } },
+      { new: true }
+    );
+
+    if (!character) {
+      return res.status(404).json({ success: false, message: "Character not found" });
+    }
+
+    res.json({ success: true });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
+const RemoveStatusEffect = async (
+  req: Request,
+  res: Response,
+): Promise<Response | void> => {
+  try {
+    const { characterId, item } = req.body;
+
+    const character = await characterModel.findByIdAndUpdate(
+      characterId,
+      { $pull: { status_effects: item } },
+      { new: true }
+    );
+
+    if (!character) {
+      return res.status(404).json({ success: false, message: "Character not found" });
+    }
+
+    res.json({ success: true, data: character });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export { UseItem, ChangeAmmo, AddStatusEffect, RemoveStatusEffect };

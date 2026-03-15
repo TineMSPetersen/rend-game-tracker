@@ -13,7 +13,7 @@ type SkillTypes = {
 };
 type WeaponSlots = { weaponType: string; mounting: string; amount: number };
 type Weapon = { _id: string; name: string };
-type Gun = { _id: string; name: string };
+type Gun = { _id: string; name: string; nickname: string; };
 type Melee = { _id: string; name: string; mounting: string };
 type UpgradeType = {
   _id: string;
@@ -600,7 +600,7 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
                                 <option value="">Pick weapon</option>
                                 {gunList.map((g) => (
                                   <option key={g._id} value={g._id}>
-                                    {g.name}
+                                    {g.name} | {g.nickname}
                                   </option>
                                 ))}
                               </select>

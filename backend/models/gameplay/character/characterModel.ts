@@ -42,7 +42,7 @@ export interface ICharacter {
     vcg: FactionRep;
     nmg: FactionRep;
   };
-  status_effects: Types.ObjectId[];
+  status_effects: String[];
   skills: Types.ObjectId[];
   mechUpgrades: Types.ObjectId[];
   gun: {
@@ -179,8 +179,7 @@ const characterSchema = new Schema<ICharacter>(
       },
     },
     status_effects: {
-      type: [Schema.Types.ObjectId],
-      ref: "statuseffect",
+      type: [String],
       default: [],
     },
     skills: {
