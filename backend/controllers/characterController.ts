@@ -2,6 +2,7 @@ import type { Request, Response } from "express-serve-static-core";
 import characterSkillModel from "../models/gameplay/character/characterSkillsModel.ts";
 import characterModel from "../models/gameplay/character/characterModel.ts";
 import consumableModel from "../models/gameplay/character/consumablesModel.ts";
+import meleeModel from "../models/gameplay/mech/meleeModel.ts";
 
 const AddCharacterSkill = async (
   req: Request,
@@ -74,25 +75,46 @@ const AddCharacter = async (
   req: Request,
   res: Response,
 ): Promise<Response | void> => {
+  
   try {
-    const {
-      name,
-      alive,
-      stats,
-      xp,
-      level,
-      gs,
-      origin,
-      alignment,
-      reputation,
-      status_effect,
-      skills,
-      mechUpgrades,
-      gun,
-      melee,
-      mech,
-      inventory,
-    } = req.body;
+    
+    
+    const { name, origin, mech } = req.body;
+    const alive = true;
+    const xp = 0;
+    const level = 0;
+    const gs = 0;
+    const alignment = "none";
+    const reputation = {
+      "raytech": {
+        "rep": 0,
+        "status": "neutral"
+      },
+      "smith": {
+        "rep": 0,
+        "status": "neutral"
+      },
+      "shimizawa": {
+        "rep": 0,
+        "status": "neutral"
+      },
+      "ugc": {
+        "rep": 0,
+        "status": "neutral"
+      },
+      "amg": {
+        "rep": 0,
+        "status": "neutral"
+      }
+    }
+    const status_effects: string[] = [];
+    const inventory: string[] = [];
+    const stats = req.body.stats;
+    const skills = req.body.skills;
+    const mechUpgrades = req.body.mechUpgrades || [];
+    const gun = req.body.gun || [];
+    const melee = req.body.melee || [];
+    
 
     const characterData = {
       name,
@@ -104,13 +126,13 @@ const AddCharacter = async (
       origin,
       alignment,
       reputation,
-      status_effect,
+      status_effects,
       skills,
       mechUpgrades,
       gun,
       melee,
       mech,
-      inventory,
+      inventory
     };
 
     const character = new characterModel(characterData);
@@ -141,7 +163,7 @@ const GetCharacterInfo = async (
     const characterData = await characterModel
       .findById(characterId.id)
       .populate("mechUpgrades")
-      .populate("melee")
+      .populate({ path: "melee", model: meleeModel })
       .populate({
         path: "gun.gunId",
         model: "gun",
@@ -173,4 +195,45 @@ const GetCharacterInfo = async (
   }
 };
 
-export { AddCharacterSkill, AddCharacter, AddConsumable, GetCharacterInfo };
+const getCharacterSkills = async (
+  req: Request,
+  res: Response,
+): Promise<Response | void> => {
+  try {
+    const skills = await characterSkillModel.find();
+
+    res.json({
+      success: true,
+      skills,
+    });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const CharacterList = async (
+  req: Request,
+  res: Response,
+): Promise<Response | void> => {
+  try {
+    const characters = await characterModel.find();
+
+    res.json({
+      success: true,
+      characters
+    })
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+export {
+  AddCharacterSkill,
+  AddCharacter,
+  AddConsumable,
+  GetCharacterInfo,
+  getCharacterSkills,
+  CharacterList
+};

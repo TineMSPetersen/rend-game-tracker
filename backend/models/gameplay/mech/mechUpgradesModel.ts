@@ -3,6 +3,7 @@ import mongoose, { Schema } from "mongoose";
 export interface IMechUpgrade {
   name: string;
   level: number;
+  type: string;
   price: number;
   effects: {
     modifierType: string;
@@ -15,6 +16,7 @@ export interface IMechUpgrade {
 const mechUpgradeSchema = new Schema({
   name: { type: String, required: true },
   level: { type: Number, default: 1 },
+  type: { type: String, required: true },
   price: { type: Number, default: 0 },
   effect: [
     {

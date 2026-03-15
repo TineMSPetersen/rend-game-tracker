@@ -10,7 +10,7 @@ export interface IMelee {
   ws: number;
   attacks: object[];
   damage_type: object[];
-  strength: object[];
+  damage: object[];
   special_rules: string;
 }
 
@@ -26,12 +26,12 @@ const damage_type = new Schema(
   {
     condition: { type: String, default: "none" },
     type: { type: String, requred: true },
-    number: { type: mongoose.Schema.Types.Mixed, required: true },
+    strength: { type: mongoose.Schema.Types.Mixed, required: true },
   },
   { _id: true },
 );
 
-const strength = new Schema(
+const damage = new Schema(
   {
     condition: { type: String, default: "none" },
     number: { type: mongoose.Schema.Types.Mixed, required: true }
@@ -50,7 +50,7 @@ const meleeSchema = new Schema<IMelee>(
     ws: { type: mongoose.Schema.Types.Mixed, required: true},
     attacks: { type: [attack_condition], required: true },
     damage_type: { type: [damage_type], required: true },
-    strength: { type: [strength], required: true },
+    damage: { type: [damage], required: true },
     special_rules: { type: String, default: "None"},
   },
   { timestamps: true },

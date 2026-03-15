@@ -3,6 +3,8 @@ import Sidebar from "./components/Sidebar";
 import { Route, Routes } from "react-router-dom";
 import CharacterSheet from "./pages/CharacterSheet";
 import MechList from "./pages/MechList";
+import AddCharacter from "./pages/AddCharacter";
+import CharacterList from "./pages/CharacterList";
 
 const App = () => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;;
@@ -17,6 +19,8 @@ const App = () => {
           <Routes>
             <Route path="/charactersheet/:id" element={<CharacterSheet backendUrl={backendUrl} />} />
             <Route path="/mechs" element={<MechList backendUrl={backendUrl} />} />
+            <Route path="/addcharacter" element={<AddCharacter backendUrl={backendUrl} />} />
+            <Route path="/characters" element={<CharacterList backendUrl={backendUrl} />} />
           </Routes>
         </div>
         </div>
