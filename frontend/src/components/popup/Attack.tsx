@@ -35,38 +35,16 @@ type Gun = {
   ammo: Ammo[];
 };
 
-type Melee = {
-  _id: string;
-  name: string;
-  ws: number;
-  attacks: Attack[];
-  damage_type: Damage_type[];
-  damage: Damage[];
-  special_rules: string;
-};
-
 type Attack = {
   condition: string;
   number: number;
 };
 
-type Damage_type = {
-  type: string;
-  strength: string | number;
-  condition: string;
-};
-
-type Damage = {
-  condition: string;
-  number: number | string;
-};
 
 type AttackProps = {
   gun: Gun[];
-  melee: Melee[];
   backendUrl: string;
   characterId: string;
-  setAction: (action: string) => void;
 };
 
 const Attack = ({

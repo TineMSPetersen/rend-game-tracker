@@ -63,7 +63,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
             </button>
             </div>
 
-            { action === "attack" && <Attack gun={characterInfo.gun} melee={characterInfo.melee} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
+            { action === "attack" && <Attack gun={characterInfo.gun} backendUrl={backendUrl} characterId={characterId.id ?? ""} />}
             
             {action === "useitem" && <UseItem inventory={characterInfo.inventory} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
 
