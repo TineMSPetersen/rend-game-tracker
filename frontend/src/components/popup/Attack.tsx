@@ -71,10 +71,8 @@ type AttackProps = {
 
 const Attack = ({
   gun,
-  melee,
   backendUrl,
   characterId,
-  setAction,
 }: AttackProps) => {
   const [gunState, setGunState] = useState<Gun[]>(gun);
   const [shot, setShot] = useState<Record<number, boolean>>({});

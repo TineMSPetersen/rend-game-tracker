@@ -49,6 +49,9 @@ const UpdateStructure = ({
   const [cockpit, setCockpit] = useState(structure.cockpit);
   const [shield, setShield] = useState(structure.shield);
 
+  const [showRegen, setShowRegen] = useState(false);
+  const [total, setTotal] = useState(structure.total);
+
   const [componentValues, setComponentValues] = useState<
     Record<string, number>
   >(
@@ -69,30 +72,33 @@ const UpdateStructure = ({
   const damageTaken = Math.max(0, Math.min(structure.total, rawDamage));
 
   const onSubmitHandler = async () => {
-  try {
-    const response = await axios.post(`${backendUrl}/api/action/structure`, {
-      characterId,
-      structure: {
-        core,
-        cockpit,
-        shield,
-        damageTaken,
-        total: structure.total - damageTaken,
-        components: structure.components.map((c) => ({
-          ...c,
-          structure: componentValues[c.name],
-        })),
-      }
-    })
+    try {
+      const response = await axios.post(`${backendUrl}/api/action/structure`, {
+        characterId,
+        structure: {
+          core,
+          cockpit,
+          shield,
+          damageTaken,
+          total: structure.total - damageTaken,
+          components: structure.components.map((c) => ({
+            ...c,
+            structure: componentValues[c.name],
+          })),
+        },
+      });
 
-    if (response.data.success) {
-      setAction("none");
+      if (response.data.success) {
+        setAction("none");
+      }
+    } catch (error) {
+      console.log(error);
     }
-    
-  } catch (error) {
-    console.log(error);
+  };
+
+  const regenTTL = async () => {
+    console.log("Later")
   }
-};
 
   return (
     <div className="min-w-120">
@@ -220,14 +226,14 @@ const UpdateStructure = ({
               <div className="flex flex-col items-center relative group">
                 <input
                   className={`w-10 h-10 flex items-center justify-center border-2 border-black rounded-md text-lg font-bold text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-                  componentValues[c.name] < 1
-                    ? "bg-red-300"
-                    : componentValues[c.name] < c.structure / 3
-                      ? "bg-yellow-200"
-                      : componentValues[c.name] > c.structure
-                        ? "bg-teal-200"
-                        : "bg-white"
-                }`}
+                    componentValues[c.name] < 1
+                      ? "bg-red-300"
+                      : componentValues[c.name] < c.structure / 3
+                        ? "bg-yellow-200"
+                        : componentValues[c.name] > c.structure
+                          ? "bg-teal-200"
+                          : "bg-white"
+                  }`}
                   type="number"
                   value={componentValues[c.name]}
                   onChange={(e) =>
@@ -258,7 +264,9 @@ const UpdateStructure = ({
 
         <div>
           <div className="flex flex-col items-center relative group">
-            <div className={`w-10 h-10 flex items-center justify-center border-2 border-black rounded-md text-lg font-bold text-center ${ (structure.total - damageTaken) < 1 ? "bg-red-300" : "bg-white"}`}>
+            <div
+              className={`w-10 h-10 flex items-center justify-center border-2 border-black rounded-md text-lg font-bold text-center ${structure.total - damageTaken < 1 ? "bg-red-300" : "bg-white"}`}
+            >
               {structure.total - damageTaken}
             </div>
             <div className="-mt-2 w-20 h-7 flex items-center justify-center border-2 border-black rounded-md bg-white font-bold">
@@ -271,11 +279,52 @@ const UpdateStructure = ({
         </div>
       </div>
       <button
-  onClick={onSubmitHandler}
-  className="py-2 px-6 bg-black text-white rounded-md cursor-pointer"
->
-  Confirm
-</button>
+        onClick={onSubmitHandler}
+        className="py-2 px-6 bg-black text-white rounded-md cursor-pointer"
+      >
+        Confirm
+      </button>
+
+      <hr className="py-5" />
+
+      <button onClick={() => setShowRegen(true)}>Regen Structure</button>
+
+      {showRegen === true && (
+        <div>
+          <div className="flex gap-2 items-center">
+            <div
+              onClick={() => setTotal(total - 1)}
+              className="select-none cursor-pointer text-2xl font-extrabold w-7 h-7 bg-slate-300 rounded-full border border-black flex justify-center items-center pb-1"
+            >
+              -
+            </div>
+            <div className="flex flex-col items-center relative group">
+              <input
+                className={`w-10 h-10 flex items-center justify-center border-2 border-black rounded-md text-lg font-bold text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
+                type="number"
+                value={total}
+                onChange={(e) => setTotal(Number(e.target.value))}
+              />
+              <div className="-mt-2 w-20 h-7 flex items-center justify-center border-2 border-black rounded-md bg-white font-bold">
+                Total
+              </div>
+            </div>
+            <div
+              onClick={() => setTotal(total + 1)}
+              className="select-none cursor-pointer text-2xl font-extrabold w-7 h-7 bg-slate-300 rounded-full border border-black flex justify-center items-center pb-1"
+            >
+              +
+            </div>
+          </div>
+
+          <button
+        onClick={regenTTL}
+        className="py-2 px-6 bg-black text-white rounded-md cursor-pointer"
+      >
+        Regen
+      </button>
+        </div>
+      )}
     </div>
   );
 };
