@@ -1,6 +1,7 @@
 type TopProps = {
   name: string;
   alive: boolean;
+  level: number;
   stats: {
     judgement: number;
     optimization: number;
@@ -15,11 +16,11 @@ type TopProps = {
   alignment: string;
 };
 
-const Top = ({ name, alive, stats, xp, gs, origin, alignment }: TopProps) => {
+const Top = ({ name, level, alive, stats, xp, gs, origin, alignment }: TopProps) => {
   return (
     <section id="top" className="w-full grid grid-cols-[4fr_4fr_6fr] gap-15">
-      <div className="flex gap-2 items-center border-2 border-black rounded-md py-2 px-4 h-fit">
-        <h2 className="text-xl text-black">{name}</h2>
+      <div className="flex gap-2 justify-between items-center border-2 border-black rounded-md py-2 px-4 h-fit">
+        <h2 className="text-xl text-black">{name} <span className="text-base font-bold">({level})</span></h2>
         <div
           className={`mt-1 w-3 h-3 rounded-full border-2 border-black relative group ${alive === true ? "bg-green-400" : "bg-slate-700"}`}
         >

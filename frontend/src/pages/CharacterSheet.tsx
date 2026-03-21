@@ -13,6 +13,9 @@ import Melee from "../components/charactersheet/Melee";
 import UseItem from "../components/popup/UseItem";
 import ChangeAmmo from "../components/popup/ChangeAmmo";
 import ChangeStatusEffect from "../components/popup/ChangeStatusEffect";
+import UpdateStructure from "../components/popup/UpdateStructure";
+import Shield from "../components/charactersheet/Shield";
+import Attack from "../components/popup/Attack";
 
 type CharacterSheetProps = {
   backendUrl: string;
@@ -59,10 +62,14 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
               ✕
             </button>
             </div>
+
+            { action === "attack" && <Attack gun={characterInfo.gun} melee={characterInfo.melee} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
             
             {action === "useitem" && <UseItem inventory={characterInfo.inventory} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
 
             {action === "ammo" && <ChangeAmmo gun={characterInfo.gun} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
+
+            { action === "structure" && <UpdateStructure structure={characterInfo.structure} mechStructure={characterInfo.mech.structure} hasShield={characterInfo.mech.hasShield} mechShield={characterInfo.mech.shield} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
 
             {action === "status" && <ChangeStatusEffect backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} status={characterInfo.status_effects} />}
           </div>
@@ -70,7 +77,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
       )}
 
       <div className="flex justify-center gap-10 pb-10">
-        <button className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
+        <button onClick={() => setAction("attack")} className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
           Attack
         </button>
         <button
@@ -85,7 +92,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
           Update Structure
         </button>
         <button onClick={() => setAction("ammo")} className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
-          Reload / Change Ammo
+          Load / Change Ammo
         </button>
         <button onClick={() => setAction("status")} className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
           Add / Remove Status Effect
@@ -94,14 +101,19 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
       <Top
         name={characterInfo.name}
         alive={characterInfo.alive}
+        level={characterInfo.level}
         stats={characterInfo.stats}
         xp={characterInfo.xp}
         gs={characterInfo.gs}
         origin={characterInfo.origin}
         alignment={characterInfo.alignment}
       />
+      <div id="shield">
+        {(characterInfo.mech.hasShield && characterInfo.structure.shield > 0) && (<Shield mechShield={characterInfo.mech.shield} shield={characterInfo.structure.shield} />)}
+        
+      </div>
       <div id="mech" className="py-10 grid grid-cols-[5fr_2fr] gap-10">
-        <Mech mech={characterInfo.mech} />
+        <Mech mech={characterInfo.mech} structure={characterInfo.structure} />
         <div className="flex flex-col gap-10">
           <Inventory inventory={characterInfo.inventory} />
           <StatusEffects status_effects={characterInfo.status_effects} />
@@ -125,6 +137,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
       <Top
         name={characterInfo.name}
         alive={characterInfo.alive}
+        level={characterInfo.level}
         stats={characterInfo.stats}
         xp={characterInfo.xp}
         gs={characterInfo.gs}

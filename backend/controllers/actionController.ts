@@ -1,5 +1,6 @@
 import type { Request, Response } from "express-serve-static-core";
 import characterModel from "../models/gameplay/character/characterModel.ts";
+import { Types } from "mongoose";
 
 const UseItem = async (
   req: Request,
@@ -107,15 +108,16 @@ const AddStatusEffect = async (
   try {
     const { characterId, statusEffect } = req.body;
 
-
     const character = await characterModel.findByIdAndUpdate(
       characterId,
       { $push: { status_effects: statusEffect } },
-      { new: true }
+      { new: true },
     );
 
     if (!character) {
-      return res.status(404).json({ success: false, message: "Character not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Character not found" });
     }
 
     res.json({ success: true });
@@ -124,7 +126,6 @@ const AddStatusEffect = async (
     res.status(500).json({ success: false, message: error.message });
   }
 };
-
 
 const RemoveStatusEffect = async (
   req: Request,
@@ -136,11 +137,13 @@ const RemoveStatusEffect = async (
     const character = await characterModel.findByIdAndUpdate(
       characterId,
       { $pull: { status_effects: item } },
-      { new: true }
+      { new: true },
     );
 
     if (!character) {
-      return res.status(404).json({ success: false, message: "Character not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Character not found" });
     }
 
     res.json({ success: true, data: character });
@@ -150,4 +153,84 @@ const RemoveStatusEffect = async (
   }
 };
 
-export { UseItem, ChangeAmmo, AddStatusEffect, RemoveStatusEffect };
+const UpdateStructure = async (
+  req: Request,
+  res: Response,
+): Promise<Response | void> => {
+  try {
+    const { characterId, structure } = req.body;
+
+    const character = await characterModel.findByIdAndUpdate(
+      characterId,
+      {
+        $set: {
+          "structure.core": structure.core,
+          "structure.cockpit": structure.cockpit,
+          "structure.shield": structure.shield,
+          "structure.components": structure.components,
+          "structure.total": structure.total
+        },
+      },
+      { returnDocument: "after" },
+    );
+
+    if (!character) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Character not found" });
+    }
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Structure updated" });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const Attack = async (
+  req: Request,
+  res: Response,
+): Promise<Response | void> => {
+  try {
+    const { characterId, gunId } = req.body;
+
+    const character = await characterModel.findOneAndUpdate(
+      {
+        _id: characterId,
+        "gun._id": gunId,
+      },
+      {
+        $inc: { "gun.$[gun].ammo.$[ammo].amount": -1 },
+      },
+      {
+        arrayFilters: [
+          { "gun._id": new Types.ObjectId(gunId) },
+          { "ammo.selected": true },
+        ],
+        new: true,
+      },
+    );
+
+    if (!character) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Character or gun not found" });
+    }
+
+    return res.status(200).json({ success: true, message: "Ammo updated" });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export {
+  UseItem,
+  ChangeAmmo,
+  AddStatusEffect,
+  RemoveStatusEffect,
+  UpdateStructure,
+  Attack,
+};

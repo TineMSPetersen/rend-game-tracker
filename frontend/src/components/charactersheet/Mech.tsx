@@ -21,11 +21,19 @@ type Mech = {
   components: Component[];
 };
 
-type MechProps = {
-  mech: Mech;
+type Structure = {
+    total: number;
+    cockpit: number;
+    core: number;
+    components: Component[];
 };
 
-const Mech = ({ mech }: MechProps) => {
+type MechProps = {
+  mech: Mech;
+  structure: Structure;
+};
+
+const Mech = ({ mech, structure }: MechProps) => {
   return (
     <section
       id="mech"
@@ -132,7 +140,7 @@ const Mech = ({ mech }: MechProps) => {
         <div className="flex flex-col gap-5">
           <div className="flex flex-col items-center relative group">
             <div className="w-10 h-10 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">
-              {mech.structure}
+              {structure.total}
             </div>
             <div className="-mt-2 w-10 h-7 flex items-center justify-center border-2 border-black rounded-md bg-white font-bold">
               TTL
@@ -145,7 +153,7 @@ const Mech = ({ mech }: MechProps) => {
 
           <div className="flex flex-col items-center">
             <div className="w-10 h-10 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">
-              {mech.cockpit}
+              {structure.cockpit}
             </div>
             <div className="-mt-2 w-20 h-7 flex items-center justify-center border-2 border-black rounded-md bg-white font-bold">
               Cockpit
@@ -154,7 +162,7 @@ const Mech = ({ mech }: MechProps) => {
 
           <div className="flex flex-col items-center">
             <div className="w-10 h-10 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">
-              {mech.core}
+              {structure.core}
             </div>
             <div className="-mt-2 w-15 h-7 flex items-center justify-center border-2 border-black rounded-md bg-white font-bold">
               Core
@@ -162,7 +170,7 @@ const Mech = ({ mech }: MechProps) => {
           </div>
         </div>
         <ul className="grid grid-cols-2 gap-5">
-          {mech.components.map((item, index) => (
+          {structure.components.map((item, index) => (
             <li
               key={index}
               className="flex flex-col items-center relative group"

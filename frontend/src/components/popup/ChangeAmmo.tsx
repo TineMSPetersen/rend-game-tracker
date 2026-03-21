@@ -10,6 +10,7 @@ type Ammo = {
     strength: number;
     damage: number;
   };
+  selected: boolean;
 };
 
 type Gun = {
@@ -29,7 +30,17 @@ type GunProps = {
 };
 
 const ChangeAmmo = ({ gun, backendUrl, characterId, setAction }: GunProps) => {
-  const [selectedAmmo, setSelectedAmmo] = useState<Record<number, string>>({});
+  const [selectedAmmo, setSelectedAmmo] = useState<Record<number, string>>(
+  () =>
+    gun.reduce(
+      (acc, item, index) => {
+        const selected = item.ammo.find((ammo) => ammo.selected);
+        if (selected) acc[index] = selected._id;
+        return acc;
+      },
+      {} as Record<number, string>,
+    ),
+);
 
   const handleChange = (index: number, value: string) => {
     setSelectedAmmo((prev) => ({ ...prev, [index]: value }));
@@ -76,10 +87,7 @@ const ChangeAmmo = ({ gun, backendUrl, characterId, setAction }: GunProps) => {
           >
             <option value="">Select Ammo</option>
             {item.ammo.map((ammo: Ammo, index: number) => (
-              <option
-              value={ammo._id}
-                key={index}
-              >
+              <option value={ammo._id} key={index}>
                 {ammo.amount}x {ammo.ammoId.name} | {ammo.ammoId.damage_type} -
                 Strength:
                 {ammo.ammoId.strength} - Damage: {ammo.ammoId.damage}

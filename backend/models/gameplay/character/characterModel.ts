@@ -53,6 +53,17 @@ export interface ICharacter {
   }[];
   melee: Types.ObjectId[];
   mech: Types.ObjectId;
+  structure: {
+    total: number;
+    components: {
+      name: string;
+      shortening: string;
+      structure: number;
+    }[];
+    core: number;
+    cockpit: number;
+    shield: number;
+  };
   inventory: {
     itemId: Types.ObjectId;
     amount: number;
@@ -73,6 +84,12 @@ const gun = new Schema(
   },
   { _id: true },
 );
+
+const compoents = new Schema({
+  name: { type: String, required: true },
+  shortening: { type: String, required: true },
+  structure: { type: Number, default: 1 },
+});
 
 const inventory = new Schema({
   itemId: { type: Schema.Types.ObjectId, ref: "consumable", required: true },
@@ -195,6 +212,13 @@ const characterSchema = new Schema<ICharacter>(
     gun: { type: [gun], default: [] },
     melee: { type: [Schema.Types.ObjectId], ref: "melee", default: [] },
     mech: { type: Schema.Types.ObjectId, ref: "mech", default: null },
+    structure: {
+      total: { type: Number, default: 1 },
+      components: { type: [compoents], required: true },
+      core: { type: Number, default: 1 },
+      cockpit: { type: Number, default: 1 },
+      shield: { type: Number, default: 0 }
+    },
     inventory: { type: [inventory], default: [] },
   },
   { timestamps: true },
