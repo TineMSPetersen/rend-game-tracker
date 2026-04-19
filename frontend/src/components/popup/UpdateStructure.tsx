@@ -97,8 +97,29 @@ const UpdateStructure = ({
   };
 
   const regenTTL = async () => {
-    console.log("Later")
+  try {
+    const response = await axios.post(`${backendUrl}/api/action/structure`, {
+      characterId,
+      structure: {
+        core,
+        cockpit,
+        shield,
+        damageTaken: 0,
+        total,
+        components: structure.components.map((c) => ({
+          ...c,
+          structure: componentValues[c.name],
+        })),
+      },
+    });
+
+    if (response.data.success) {
+      setAction("none");
+    }
+  } catch (error) {
+    console.log(error);
   }
+};
 
   return (
     <div className="min-w-120">
