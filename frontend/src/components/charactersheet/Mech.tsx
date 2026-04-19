@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 type Component = {
   structure: number;
   shortening: string;
@@ -38,19 +36,6 @@ type MechProps = {
 };
 
 const Mech = ({ mech, structure }: MechProps) => {
-  const [componentValues, setComponentValues] = useState<
-    Record<string, number>
-  >(
-    Object.fromEntries(
-      structure.components.map((component) => [
-        component.name,
-        component.structure,
-      ]),
-    ),
-  );
-
-  console.log(structure.cockpit)
-  console.log(mech.structure.cockpit);
 
   return (
     <section
