@@ -308,10 +308,10 @@ const UpdateStructure = ({
 
       <hr className="py-5" />
 
-      <button onClick={() => setShowRegen(true)}>Regen Structure</button>
+      <button className="py-2 px-6 bg-black text-white rounded-md cursor-pointer" onClick={() => setShowRegen(!showRegen)}>Regen Structure</button>
 
       {showRegen === true && (
-        <div>
+        <div className="mt-10">
           <div className="flex gap-2 items-center">
             <div
               onClick={() => setTotal(total - 1)}
@@ -340,9 +340,9 @@ const UpdateStructure = ({
 
           <button
         onClick={regenTTL}
-        className="py-2 px-6 bg-black text-white rounded-md cursor-pointer"
+        className="py-2 px-6 bg-black text-white rounded-md cursor-pointer mt-5"
       >
-        Regen
+        Confirm Regen
       </button>
         </div>
       )}
