@@ -16,6 +16,7 @@ export interface IMech {
     ex: number;
     ewar: number;
   };
+  hasShield: boolean;
   shield: {
     kn: number;
     em: number;
@@ -24,19 +25,21 @@ export interface IMech {
     ex: number;
     structure: number;
   };
-  structure: number;
-  components: {
-    name: string;
-    shortening: string;
-    structure: number;
-  }[];
-  core: number;
-  cockpit: number;
+  structure: {
+    total: number;
+    components: {
+      name: string;
+      shortening: string;
+      structure: number;
+    }[];
+    core: number;
+    cockpit: number;
+  };
   traits: string[];
   defaultWeapon: {
     guns: Types.ObjectId[];
     melee: Types.ObjectId[];
-  }
+  };
   weaponSlots: {
     weaponType: string;
     mounting: string;
@@ -46,10 +49,10 @@ export interface IMech {
     passive: number;
     trigger: number;
     bio: number;
-  }
+  };
 }
 
-const compoents = new Schema({
+const components = new Schema({
   name: { type: String, required: true },
   shortening: { type: String, required: true },
   structure: { type: Number, default: 1 },
@@ -58,8 +61,8 @@ const compoents = new Schema({
 const weapons = new Schema({
   weaponType: { type: String, required: true },
   mounting: { type: String, required: true },
-  amount: { type: Number, default: 0 }
-})
+  amount: { type: Number, default: 0 },
+});
 
 const mechSchema = new Schema<IMech>({
   modelNumber: { type: String, required: true },
@@ -81,6 +84,7 @@ const mechSchema = new Schema<IMech>({
     ex: { type: Number, default: 0 },
     ewar: { type: Number, default: 0 },
   },
+  hasShield: { type: Boolean, default: false },
   shield: {
     kn: { type: Number, default: 0 },
     em: { type: Number, default: 0 },
@@ -89,14 +93,16 @@ const mechSchema = new Schema<IMech>({
     ex: { type: Number, default: 0 },
     structure: { type: Number, default: 0 },
   },
-  structure: { type: Number, default: 1 },
-  components: { type: [compoents], required: true },
-  core: { type: Number, default: 1 },
-  cockpit: { type: Number, default: 1 },
+  structure: {
+    total: { type: Number, default: 1 },
+    components: { type: [components], required: true },
+    core: { type: Number, default: 1 },
+    cockpit: { type: Number, default: 1 },
+  },
   traits: { type: [String], default: [] },
   defaultWeapon: {
     gun: { type: [Schema.Types.ObjectId], ref: "gun", default: [] },
-    melee: { type: [Schema.Types.ObjectId], ref: "melee", default: [] }
+    melee: { type: [Schema.Types.ObjectId], ref: "melee", default: [] },
   },
   weaponSlots: { type: [weapons], default: [] },
   upgradeSlots: {

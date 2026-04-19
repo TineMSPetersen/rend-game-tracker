@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 type Component = {
   structure: number;
   shortening: string;
@@ -15,7 +17,16 @@ type Mech = {
     ewar: number;
   };
   image: string;
-  structure: number;
+  structure: {
+    total: number;
+    cockpit: number;
+    core: number;
+    components: Component[];
+  };
+};
+
+type Structure = {
+  total: number;
   cockpit: number;
   core: number;
   components: Component[];
@@ -23,9 +34,24 @@ type Mech = {
 
 type MechProps = {
   mech: Mech;
+  structure: Structure;
 };
 
-const Mech = ({ mech }: MechProps) => {
+const Mech = ({ mech, structure }: MechProps) => {
+  const [componentValues, setComponentValues] = useState<
+    Record<string, number>
+  >(
+    Object.fromEntries(
+      structure.components.map((component) => [
+        component.name,
+        component.structure,
+      ]),
+    ),
+  );
+
+  console.log(structure.cockpit)
+  console.log(mech.structure.cockpit);
+
   return (
     <section
       id="mech"
@@ -131,8 +157,10 @@ const Mech = ({ mech }: MechProps) => {
       >
         <div className="flex flex-col gap-5">
           <div className="flex flex-col items-center relative group">
-            <div className="w-10 h-10 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">
-              {mech.structure}
+            <div
+              className={`w-10 h-10 flex items-center justify-center border-2 border-black rounded-md text-lg font-bold ${structure.total < 1 ? "bg-red-300" : "bg-white"}`}
+            >
+              {structure.total}
             </div>
             <div className="-mt-2 w-10 h-7 flex items-center justify-center border-2 border-black rounded-md bg-white font-bold">
               TTL
@@ -144,8 +172,18 @@ const Mech = ({ mech }: MechProps) => {
           </div>
 
           <div className="flex flex-col items-center">
-            <div className="w-10 h-10 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">
-              {mech.cockpit}
+            <div
+              className={`w-10 h-10 flex items-center justify-center border-2 border-black rounded-md text-lg font-bold ${
+                structure.cockpit < 1
+                  ? "bg-red-300"
+                  : structure.cockpit < mech.structure.cockpit / 3
+                    ? "bg-yellow-200"
+                    : structure.cockpit > mech.structure.cockpit
+                      ? "bg-teal-200"
+                      : "bg-white"
+              }`}
+            >
+              {structure.cockpit}
             </div>
             <div className="-mt-2 w-20 h-7 flex items-center justify-center border-2 border-black rounded-md bg-white font-bold">
               Cockpit
@@ -153,8 +191,16 @@ const Mech = ({ mech }: MechProps) => {
           </div>
 
           <div className="flex flex-col items-center">
-            <div className="w-10 h-10 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">
-              {mech.core}
+            <div className={`w-10 h-10 flex items-center justify-center border-2 border-black rounded-md text-lg font-bold ${
+                structure.core < 1
+                  ? "bg-red-300"
+                  : structure.core < mech.structure.core / 3
+                    ? "bg-yellow-200"
+                    : structure.core > mech.structure.core
+                      ? "bg-teal-200"
+                      : "bg-white"
+              }`}>
+              {structure.core}
             </div>
             <div className="-mt-2 w-15 h-7 flex items-center justify-center border-2 border-black rounded-md bg-white font-bold">
               Core
@@ -162,12 +208,20 @@ const Mech = ({ mech }: MechProps) => {
           </div>
         </div>
         <ul className="grid grid-cols-2 gap-5">
-          {mech.components.map((item, index) => (
+          {structure.components.map((item, index) => (
             <li
               key={index}
               className="flex flex-col items-center relative group"
             >
-              <div className="w-10 h-10 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">
+              <div className={`w-10 h-10 flex items-center justify-center border-2 border-black rounded-md text-lg font-bold ${
+                item.structure < 1
+                  ? "bg-red-300"
+                  : item.structure < (mech.structure.components.find(c => c.shortening === item.shortening)?.structure ?? 0) / 3
+                    ? "bg-yellow-200"
+                    : structure.core > mech.structure.core
+                      ? "bg-teal-200"
+                      : "bg-white"
+              }`}>
                 {item.structure}
               </div>
               <div className="-mt-2 w-10 h-7 flex items-center justify-center border-2 border-black rounded-md bg-white font-bold">

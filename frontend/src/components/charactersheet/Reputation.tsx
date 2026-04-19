@@ -53,7 +53,7 @@ const Reputation = ({ reputation }: ReputationProps) => {
           <div className="relative group">
             <img className="w-15 border-2 border-black rounded-md" src={assets.smith} alt="smith" />
             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-md rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
-              Smith and Cogs
+              Smith and Cox
             </div>
           </div>
           <div className="w-15 h-15 flex items-center justify-center border-2 border-black rounded-md bg-white text-lg font-bold">

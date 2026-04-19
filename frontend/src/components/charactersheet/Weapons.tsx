@@ -5,7 +5,6 @@ type Ammo = {
     strength: number;
     damage: number;
     special_effects: string;
-
   };
   amount: number;
   selected: boolean;
@@ -63,31 +62,48 @@ const Weapons = ({ gun }: WeaponProps) => {
                     ))}
                   </p>
                   <div className="absolute bottom-full left-0 mb-2 px-2 py-1 bg-gray-800 text-white text-lg rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-9999 w-100 min-w-100 flex flex-col gap-2">
-                        <p className="text-xl">{item.gunId.type} | {item.gunId.subtype}</p>
-                        <p className="text-lg">
-                          {item.gunId.keywords.map((keyword, keywordIndex) => (
-                            <span key={keywordIndex}>{keywordIndex > 0 && " - "}[ {keyword} ]</span>
-                          ))}
-                        </p>
-                        <p className="text-sm">{item.gunId.description}</p>
-                      </div>
+                    <p className="text-xl">
+                      {item.gunId.type} | {item.gunId.subtype}
+                    </p>
+                    <p className="text-lg">
+                      {item.gunId.keywords.map((keyword, keywordIndex) => (
+                        <span key={keywordIndex}>
+                          {keywordIndex > 0 && " - "}[ {keyword} ]
+                        </span>
+                      ))}
+                    </p>
+                    <p className="text-sm">{item.gunId.description}</p>
+                  </div>
                 </div>
                 <div className="border-2 border-black rounded-md py-2 px-4 w-full flex flex-col gap-2">
                   {item.ammo.map((ammo, ammoIndex) => (
-                    <div className="group relative">
-                      <p
-                        key={ammoIndex}
-                        className={` text-base ${ammo.selected ? "font-bold" : "text-gray-500"}`}
-                      >
-                        {ammo.ammoId.name} [ {ammo.amount} ]
-                        {ammo.selected && (
-                          <span className="text-xs font-bold"> (Equipped)</span>
-                        )}
-                      </p>
-                      <div className="absolute bottom-full right-0 mb-2 px-2 py-1 bg-gray-800 text-white text-lg rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-9999 w-100 min-w-100 flex flex-col gap-2">
-                        <p className="text-xl">{ammo.ammoId.damage_type} | Strength: {ammo.ammoId.strength} | Damage: {ammo.ammoId.damage}</p>
-                        {ammo.ammoId.special_effects != "none" && <p>{ammo.ammoId.special_effects}</p>}
-                      </div>
+                    <div>
+                      {ammo.amount > 0 && (
+                        <div className="group relative">
+                          <p
+                            key={ammoIndex}
+                            className={` text-base ${ammo.selected ? "font-bold" : "text-gray-500"}`}
+                          >
+                            {ammo.ammoId.name} [ {ammo.amount} ]
+                            {ammo.selected && (
+                              <span className="text-xs font-bold">
+                                {" "}
+                                (Equipped)
+                              </span>
+                            )}
+                          </p>
+                          <div className="absolute bottom-full right-0 mb-2 px-2 py-1 bg-gray-800 text-white text-lg rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-9999 w-100 min-w-100 flex flex-col gap-2">
+                            <p className="text-xl">
+                              {ammo.ammoId.damage_type} | Strength:{" "}
+                              {ammo.ammoId.strength} | Damage:{" "}
+                              {ammo.ammoId.damage}
+                            </p>
+                            {ammo.ammoId.special_effects != "none" && (
+                              <p>{ammo.ammoId.special_effects}</p>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
