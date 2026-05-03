@@ -1,11 +1,16 @@
 import { NavLink } from "react-router-dom"
 import { assets } from "../assets/assets"
 
+interface NavbarProps {
+  setToken: React.Dispatch<React.SetStateAction<string | null>>;
+}
 
-
-
-const Navbar = () => {
-  const loggedIn = false;
+const Navbar: React.FC<NavbarProps> = ({setToken}) => {
+  const logoutUser = async () => {
+    setToken("");
+    localStorage.removeItem("token")
+    window.location.reload();
+  }
 
   return (
     <div className='flex items-center py-2 px-[4%] justify-between border-b-2 border-gray-300'>
@@ -16,7 +21,7 @@ const Navbar = () => {
       </div>
       </NavLink>
       
-      <button className={`bg-black text-white px-5 py-2 sm:px-7 sm:py-2 rounded-full text-xs sm:text-sm cursor-pointer`}>{loggedIn ? "Logout" : "Log In"}</button>
+      <button onClick={() => logoutUser()} className={`bg-black text-white px-5 py-2 sm:px-7 sm:py-2 rounded-full text-xs sm:text-sm cursor-pointer`}>Logout</button>
     </div>
   )
 }

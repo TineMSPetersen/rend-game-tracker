@@ -19,7 +19,7 @@ const App = () => {
     <>
     { token ? (
       <div className="bg-gray-50 min-h-screen">
-      <Navbar />
+      <Navbar setToken={setToken} />
       <div className="flex w-full">
         <Sidebar />
       <div className="w-[70%] mx-auto ml-[max(5vh,25px)] my-8 text-gray-600 text-base">
