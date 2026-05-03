@@ -5,13 +5,20 @@ import CharacterSheet from "./pages/CharacterSheet";
 import MechList from "./pages/MechList";
 import AddCharacter from "./pages/AddCharacter";
 import CharacterList from "./pages/CharacterList";
+import Login from "./components/Login";
+import { useState } from "react";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token"),
+  );
 
   return (
     <>
-    <div className="bg-gray-50 min-h-screen">
+    { token ? (
+      <div className="bg-gray-50 min-h-screen">
       <Navbar />
       <div className="flex w-full">
         <Sidebar />
@@ -25,7 +32,24 @@ const App = () => {
         </div>
         </div>
 
-    </div></>
+    </div>
+    ) : (
+      <Login backendUrl={backendUrl} setToken={setToken} />
+    ) }
+
+    <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
   );
 };
 
