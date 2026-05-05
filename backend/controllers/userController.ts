@@ -38,7 +38,7 @@ const LoginUser = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { username, password } = req.body;
 
-    const user = await userModel.findOne({ username });
+    const user = await userModel.findOne({ username: username.toLowerCase() });
     if (!user) {
       return res.json({ success: false, message: "User does not exist" });
     }
