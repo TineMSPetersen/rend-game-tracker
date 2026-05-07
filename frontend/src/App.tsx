@@ -27,7 +27,7 @@ const App = () => {
           <Routes>
             <Route path="/charactersheet/:id" element={<CharacterSheet backendUrl={backendUrl} />} />
             <Route path="/mechs" element={<MechList backendUrl={backendUrl} />} />
-            <Route path="/addcharacter" element={<AddCharacter backendUrl={backendUrl} />} />
+            <Route path="/addcharacter" element={<AddCharacter backendUrl={backendUrl} token={token} />} />
             <Route path="/characters" element={<CharacterList backendUrl={backendUrl} />} />
             <Route path="/my-characters" element={<MyCharacters backendUrl={backendUrl} token={token} /> } />
           </Routes>

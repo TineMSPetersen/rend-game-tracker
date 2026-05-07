@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
-type AddCharacterProps = { backendUrl: string };
+type AddCharacterProps = {
+  backendUrl: string;
+  token: string;
+};
 
 type SkillTypes = {
   _id: string;
@@ -33,7 +37,17 @@ type MechTypes = {
   upgradeSlots: { passive: number; trigger: number; bio: number };
 };
 
-const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
+const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl, token }) => {
+
+  type TokenPayload = {
+      userId: string;
+      username: string;
+    };
+  
+    const decoded = jwtDecode<TokenPayload>(token);
+  
+    const userId = decoded.userId;
+
   const navigate = useNavigate();
   const defaultJockey = 24;
   const [jugdement, setJudgement] = useState(0);
@@ -206,6 +220,7 @@ const AddCharacter: React.FC<AddCharacterProps> = ({ backendUrl }) => {
 
       const data = {
         name,
+        user: userId,
         stats,
         origin,
         skills,

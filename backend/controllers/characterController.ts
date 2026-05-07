@@ -79,7 +79,7 @@ const AddCharacter = async (
   try {
     
     
-    const { name, origin, mech } = req.body;
+    const { name, user, origin, mech } = req.body;
     const alive = true;
     const xp = 0;
     const level = 0;
@@ -118,6 +118,7 @@ const AddCharacter = async (
 
     const characterData = {
       name,
+      user,
       alive,
       stats,
       xp,
@@ -134,6 +135,8 @@ const AddCharacter = async (
       mech,
       inventory
     };
+
+    console.log(characterData)
 
     const character = new characterModel(characterData);
     await character.save();
