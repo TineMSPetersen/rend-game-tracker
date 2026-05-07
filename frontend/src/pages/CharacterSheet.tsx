@@ -16,12 +16,26 @@ import ChangeStatusEffect from "../components/popup/ChangeStatusEffect";
 import UpdateStructure from "../components/popup/UpdateStructure";
 import Shield from "../components/charactersheet/Shield";
 import Attack from "../components/popup/Attack";
+import { jwtDecode } from "jwt-decode";
 
 type CharacterSheetProps = {
   backendUrl: string;
+  token: string;
 };
 
-const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
+const CharacterSheet: React.FC<CharacterSheetProps> = ({
+  backendUrl,
+  token,
+}) => {
+  type TokenPayload = {
+    userId: string;
+    username: string;
+  };
+
+  const decoded = jwtDecode<TokenPayload>(token);
+
+  const userId = decoded.userId;
+
   const characterId = useParams();
   const [characterInfo, setCharacterInfo] = useState<any>(null);
   const [action, setAction] = useState("none");
@@ -54,50 +68,100 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
 
   return (
     <div>
-      {action != "none" && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-10">
-          <div className="bg-white rounded-lg shadow-xl p-6 relative">
-            <div className="flex justify-end w-full">
-              <button onClick={() => setAction('none')} className="text-gray-500 hover:text-gray-800 cursor-pointer mb-4">
-              ✕
-            </button>
+      {characterInfo.user === userId && (
+        <>
+          {action !== "none" && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-10">
+              <div className="bg-white rounded-lg shadow-xl p-6 relative">
+                <div className="flex justify-end w-full">
+                  <button
+                    onClick={() => setAction("none")}
+                    className="text-gray-500 hover:text-gray-800 cursor-pointer mb-4"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {action === "attack" && (
+                  <Attack
+                    gun={characterInfo.gun}
+                    backendUrl={backendUrl}
+                    characterId={characterId.id ?? ""}
+                  />
+                )}
+                {action === "useitem" && (
+                  <UseItem
+                    inventory={characterInfo.inventory}
+                    backendUrl={backendUrl}
+                    characterId={characterId.id ?? ""}
+                    setAction={setAction}
+                  />
+                )}
+                {action === "ammo" && (
+                  <ChangeAmmo
+                    gun={characterInfo.gun}
+                    backendUrl={backendUrl}
+                    characterId={characterId.id ?? ""}
+                    setAction={setAction}
+                  />
+                )}
+                {action === "structure" && (
+                  <UpdateStructure
+                    structure={characterInfo.structure}
+                    mechStructure={characterInfo.mech.structure}
+                    hasShield={characterInfo.mech.hasShield}
+                    mechShield={characterInfo.mech.shield}
+                    backendUrl={backendUrl}
+                    characterId={characterId.id ?? ""}
+                    setAction={setAction}
+                  />
+                )}
+                {action === "status" && (
+                  <ChangeStatusEffect
+                    backendUrl={backendUrl}
+                    characterId={characterId.id ?? ""}
+                    setAction={setAction}
+                    status={characterInfo.status_effects}
+                  />
+                )}
+              </div>
             </div>
+          )}
 
-            { action === "attack" && <Attack gun={characterInfo.gun} backendUrl={backendUrl} characterId={characterId.id ?? ""} />}
-            
-            {action === "useitem" && <UseItem inventory={characterInfo.inventory} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
-
-            {action === "ammo" && <ChangeAmmo gun={characterInfo.gun} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
-
-            { action === "structure" && <UpdateStructure structure={characterInfo.structure} mechStructure={characterInfo.mech.structure} hasShield={characterInfo.mech.hasShield} mechShield={characterInfo.mech.shield} backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} />}
-
-            {action === "status" && <ChangeStatusEffect backendUrl={backendUrl} characterId={characterId.id ?? ""} setAction={setAction} status={characterInfo.status_effects} />}
+          <div className="flex justify-center gap-10 pb-10">
+            <button
+              onClick={() => setAction("attack")}
+              className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5"
+            >
+              Attack
+            </button>
+            <button
+              onClick={() => setAction("useitem")}
+              className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5"
+            >
+              Use Item
+            </button>
+            <button
+              onClick={() => setAction("structure")}
+              className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5"
+            >
+              Update Structure
+            </button>
+            <button
+              onClick={() => setAction("ammo")}
+              className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5"
+            >
+              Load / Change Ammo
+            </button>
+            <button
+              onClick={() => setAction("status")}
+              className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5"
+            >
+              Add / Remove Status Effect
+            </button>
           </div>
-        </div>
+        </>
       )}
-
-      <div className="flex justify-center gap-10 pb-10">
-        <button onClick={() => setAction("attack")} className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
-          Attack
-        </button>
-        <button
-          onClick={() => setAction("useitem")}
-          className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5"
-        >
-          Use Item
-        </button>
-        <button 
-          onClick={() => setAction("structure")}
-          className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
-          Update Structure
-        </button>
-        <button onClick={() => setAction("ammo")} className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
-          Load / Change Ammo
-        </button>
-        <button onClick={() => setAction("status")} className="py-2 px-4 rounded-md text-white bg-black cursor-pointer mt-5">
-          Add / Remove Status Effect
-        </button>
-      </div>
       <Top
         name={characterInfo.name}
         alive={characterInfo.alive}
@@ -109,8 +173,12 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ backendUrl }) => {
         alignment={characterInfo.alignment}
       />
       <div id="shield">
-        {(characterInfo.mech.hasShield && characterInfo.structure.shield > 0) && (<Shield mechShield={characterInfo.mech.shield} shield={characterInfo.structure.shield} />)}
-        
+        {characterInfo.mech.hasShield && characterInfo.structure.shield > 0 && (
+          <Shield
+            mechShield={characterInfo.mech.shield}
+            shield={characterInfo.structure.shield}
+          />
+        )}
       </div>
       <div id="mech" className="py-10 grid grid-cols-[5fr_2fr] gap-10">
         <Mech mech={characterInfo.mech} structure={characterInfo.structure} />
