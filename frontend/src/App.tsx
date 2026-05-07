@@ -8,6 +8,7 @@ import CharacterList from "./pages/CharacterList";
 import Login from "./components/Login";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
+import MyCharacters from "./pages/MyCharacters";
 
 const App = () => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -28,6 +29,7 @@ const App = () => {
             <Route path="/mechs" element={<MechList backendUrl={backendUrl} />} />
             <Route path="/addcharacter" element={<AddCharacter backendUrl={backendUrl} />} />
             <Route path="/characters" element={<CharacterList backendUrl={backendUrl} />} />
+            <Route path="/my-characters" element={<MyCharacters backendUrl={backendUrl} token={token} /> } />
           </Routes>
         </div>
         </div>

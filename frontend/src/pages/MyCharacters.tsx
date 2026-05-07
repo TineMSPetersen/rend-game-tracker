@@ -1,9 +1,11 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 type CharacterListProps = {
   backendUrl: string;
+  token: string;
 };
 
 type Character = {
@@ -11,13 +13,22 @@ type Character = {
   name: string;
 };
 
-const CharacterList: React.FC<CharacterListProps> = ({ backendUrl }) => {
+const MyCharacters: React.FC<CharacterListProps> = ({ backendUrl, token }) => {
+  type TokenPayload = {
+    userId: string;
+    username: string;
+  };
+
+  const decoded = jwtDecode<TokenPayload>(token);
+
+  const userId = decoded.userId;
+  
   const [characterList, setCharacterList] = useState([]);
 
   const getCharacterList = async () => {
     try {
-      const response = await axios.get(
-        `${backendUrl}/api/character/character-list`,
+      const response = await axios.post(
+        `${backendUrl}/api/character/usercharacters`, { userId }
       );
 
       if (response.data.success) {
@@ -51,4 +62,4 @@ const CharacterList: React.FC<CharacterListProps> = ({ backendUrl }) => {
   );
 };
 
-export default CharacterList;
+export default MyCharacters;

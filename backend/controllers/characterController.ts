@@ -229,11 +229,30 @@ const CharacterList = async (
   }
 }
 
+const FilteredCharacterList = async (
+  req: Request,
+  res: Response,
+): Promise<Response | void> => {
+  try {
+    const { userId } = req.body;
+    const characters = await characterModel.find({ user: userId });
+
+    res.json({
+      success: true,
+      characters
+    })
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
 export {
   AddCharacterSkill,
   AddCharacter,
   AddConsumable,
   GetCharacterInfo,
   getCharacterSkills,
-  CharacterList
+  CharacterList,
+  FilteredCharacterList
 };
