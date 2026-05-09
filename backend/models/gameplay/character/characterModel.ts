@@ -21,6 +21,7 @@ type WeaponAmmo = {
 
 export interface ICharacter {
   name: string;
+  user: string;
   alive: boolean;
   stats: {
     judgement: number;
@@ -99,6 +100,7 @@ const inventory = new Schema({
 const characterSchema = new Schema<ICharacter>(
   {
     name: { type: String, required: true },
+    user: { type: String, default: ""},
     alive: { type: Boolean, required: true },
     stats: {
       judgement: { type: Number, default: 0, required: true },

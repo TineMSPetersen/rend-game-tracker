@@ -6,6 +6,7 @@ import connectCloudinary from './config/cloudinary.js';
 import mechRouter from './routes/mechRoute.ts';
 import characterRouter from './routes/characterRoute.ts';
 import actionRouter from './routes/actionRoute.ts';
+import userRouter from './routes/userRoute.ts';
 
 // App Config
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.json())
 app.use('/api/mech', mechRouter);
 app.use('/api/character', characterRouter)
 app.use('/api/action', actionRouter)
+app.use('/api/user', userRouter)
 
 app.get('/', (req, res) => {
   res.send("API is Working")
